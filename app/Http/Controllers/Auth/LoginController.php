@@ -37,4 +37,39 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+
+    public function login(Request $request)
+    {
+        $input = $request->all();
+
+        $rules = [
+            'username'                   => 'required',
+            'password'                => 'required',
+        ];
+
+        $messages = [
+            'username.required'             => 'Username harus diisi',
+            'password.required'          => 'Password harus diisi'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+
+        if (auth()->attempt(array('username' => $input['username'], 'password' => $input['password']))) {
+            if (auth()->user()->role == "admin") {
+                Alert::success('Sukses', 'Berhasil Login Admin');
+                return redirect('/admin/dashboard');
+            } else {
+                Alert::success('Sukses', 'Berhasil Login');
+                return redirect('/');
+            }
+        } else {
+            Alert::error('Gagal', 'Akun Belum Terdaftar');
+            return redirect()->route('login');
+        }
+    }
 }
