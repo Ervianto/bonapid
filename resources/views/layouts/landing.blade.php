@@ -96,6 +96,21 @@
                                 </li>
                                 <li>
                                     <div class="header-icons">
+                                        @if(Auth::check())
+                                        <a href="#"><i class="fas fa-user"></i> {{Auth::user()->username}}</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="{{route('customer.account')}}"> Profile</a></li>
+                                            <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();"> Sign Out</a>
+
+                                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                                    @csrf
+                                                </form>
+                                            </li>
+                                        </ul>
+                                        @else
+                                        <a href="{{route('customer.signin')}}"><i class="fas fa-user"></i> Masuk</a>
+                                        @endif
                                         <a class="shopping-cart" href="cart.html"><i class="fas fa-shopping-cart"></i></a>
                                         <a class="mobile-hide search-bar-icon" href="#"><i class="fas fa-search"></i></a>
                                     </div>
@@ -120,8 +135,8 @@
                     <span class="close-btn"><i class="fas fa-window-close"></i></span>
                     <div class="search-bar">
                         <div class="search-bar-tablecell">
-                            <h3>Search For:</h3>
-                            <input type="text" placeholder="Keywords">
+                            <h3>Pencarian :</h3>
+                            <input type="text" placeholder="Masukkan Nama Barang">
                             <button type="submit">Search <i class="fas fa-search"></i></button>
                         </div>
                     </div>

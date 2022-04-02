@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+Route::get('/signin', [App\Http\Controllers\Customer\AccountController::class, 'signin'])->name('customer.signin');
+Route::post('/signup', [App\Http\Controllers\Customer\AccountController::class, 'signup'])->name('customer.signup');
+Route::post('/account', [App\Http\Controllers\Customer\AccountController::class, 'index'])->name('customer.account');
 
 Auth::routes();
 

@@ -47,12 +47,12 @@ class LoginController extends Controller
         $input = $request->all();
 
         $rules = [
-            'username'                   => 'required',
+            'email'                   => 'required',
             'password'                => 'required',
         ];
 
         $messages = [
-            'username.required'             => 'Username harus diisi',
+            'email.required'             => 'email harus diisi',
             'password.required'          => 'Password harus diisi'
         ];
 
@@ -62,7 +62,7 @@ class LoginController extends Controller
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
 
-        if (auth()->attempt(array('username' => $input['username'], 'password' => $input['password']))) {
+        if (auth()->attempt(array('email' => $input['email'], 'password' => $input['password']))) {
             if (auth()->user()->role == "admin") {
                 Alert::success('Sukses', 'Berhasil Login Admin');
                 return redirect('/admin/dashboard');
@@ -72,7 +72,7 @@ class LoginController extends Controller
             }
         } else {
             Alert::error('Gagal', 'Akun Belum Terdaftar');
-            return redirect()->route('login');
+            return redirect()->route('customer.signin');
         }
     }
 }

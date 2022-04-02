@@ -15,7 +15,11 @@
                     @endif
 
                     <!-- {{ __('You are logged in!') }} -->
-                    <a href="{{route('dashboard')}}"> Klik Disini...</a>
+                    @if(Auth::user()->role=='customer')
+                    <a href="{{route('customer.dashboard')}}"> Klik Disini...</a>
+                    @else
+                    <a href="{{route('admin.dashboard')}}"> Klik Disini...</a>
+                    @endif
                 </div>
             </div>
         </div>
