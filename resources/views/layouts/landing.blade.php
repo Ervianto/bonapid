@@ -6,9 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- title -->
     <title>E-Commerce</title>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 
     <!-- favicon -->
     <link rel="shortcut icon" type="image/png" href="{{asset('landing/img/favicon.png')}}">
@@ -19,8 +26,8 @@
     <link rel="stylesheet" href="{{asset('landing/css/all.min.css')}}">
     <!-- bootstrap -->
     <link rel="stylesheet" href="{{asset('landing/bootstrap/css/bootstrap.min.css')}}">
-    <!-- owl carousel -->
-    <link rel="stylesheet" href="{{asset('landing/css/owl.carousel.css')}}">
+    {{-- <!-- owl carousel -->
+    <link rel="stylesheet" href="{{asset('landing/css/owl.carousel.css')}}"> --}}
     <!-- magnific popup -->
     <link rel="stylesheet" href="{{asset('landing/css/magnific-popup.css')}}">
     <!-- animate css -->
@@ -226,6 +233,8 @@
     <script src="{{asset('landing/js/sticker.js')}}"></script>
     <!-- main js -->
     <script src="{{asset('landing/js/main.js')}}"></script>
+
+    @stack('scripts')
 
 </body>
 

@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+Route::get('/produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'detailProduk']);
+Route::resource('customer-cart', App\Http\Controllers\Customer\CartController::class);
+Route::get('/checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'index']);
+Route::post('/check_ongkir', [App\Http\Controllers\Customer\CheckoutController::class, 'check_ongkir']);
+Route::post('/proses_checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'checkout']);
 
 Auth::routes();
 

@@ -20,6 +20,7 @@ class CreateProduksTable extends Migration
             $table->string('stok_produk', 20);
             $table->string('harga_produk', 15);
             $table->string('ukuran_produk');
+            $table->string('berat_produk');
             $table->string('variasi_produk');
             $table->string('foto_produk');
             $table->mediumText('deskripsi_produk');

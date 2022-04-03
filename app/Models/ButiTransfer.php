@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pembayaran extends Model
+class ButiTransfer extends Model
 {
     use HasFactory;
-    protected $table = "pembayaran";
+    protected $table = "buti_transfer";
     protected $fillable = [
         "kode_transaksi",
-        "bank_id",
-        "user_id"
+        "bukti_transfer",
+        "is_verified"
     ];
 }
