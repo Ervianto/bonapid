@@ -67,6 +67,7 @@
                         </tbody>
                     </table>
                     <div class="row justify-content-end mt-3">
+                        <a href="{{ url('/') }}" class="beli-btn mr-2">Belanja Lagi</a>
                         <a href="{{ url('checkout') }}" class="boxed-btn black">Check Out</a>
                     </div>
                 </div>

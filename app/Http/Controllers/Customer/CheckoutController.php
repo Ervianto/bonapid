@@ -83,7 +83,7 @@ class CheckoutController extends Controller
 
         \Cart::clear();
 
-        return redirect()->back()->with('success', 'Berhasil melakukan checkout');
+        return redirect('customer-transaksi')->with('success', 'Berhasil melakukan checkout');
 
     }
 
