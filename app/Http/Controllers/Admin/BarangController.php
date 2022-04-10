@@ -34,22 +34,22 @@ class BarangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $barang = DB::table('barang')->orderBy('barang_nama')->get();
+            $produk = DB::table('produk')->orderBy('nama_produk')->get();
 
-            return DataTables::of($barang)
+            return DataTables::of($produk)
                 ->addColumn('status', function ($row) {
-                    if ($row->barang_status == 0) {
-                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->barang_id . '"><i class="mdi mdi-lock"></i> Hidden</a>';
+                    if ($row->status == 0) {
+                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-lock"></i> Hidden</a>';
                     } else {
-                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->barang_id . '"><i class="mdi mdi-lock-open"></i> Display</a>';
+                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-lock-open"></i> Display</a>';
                     }
                     return $data;
                 })
                 ->addColumn('aksi', function ($row) {
-                    $data = '<a href="javascript:void(0)" class="btn btn-info btn-icon-text" id="btnDetail" data-toggle="modal" data-id="' . $row->barang_id . '"><i class="mdi mdi-eye"></i></a>
-                                        <a href="javascript:void(0)" class="btn btn-warning btn-icon-text" id="btnEdit" data-toggle="modal" data-id="' . $row->barang_id . '"><i class="mdi mdi-pencil-box"></i></a>
+                    $data = '<a href="javascript:void(0)" class="btn btn-info btn-icon-text" id="btnDetail" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-eye"></i></a>
+                                        <a href="javascript:void(0)" class="btn btn-warning btn-icon-text" id="btnEdit" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-pencil-box"></i></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
-                                        <a href="javascript:void(0)" class="btn btn-danger btn-icon-text" id="btnHapus" data-toggle="modal" data-id="' . $row->barang_id . '"><i class="mdi mdi-trash-can-outline"></i></a>
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-icon-text" id="btnHapus" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-trash-can-outline"></i></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">';
                     return $data;
                 })
@@ -58,7 +58,7 @@ class BarangController extends Controller
                 ->make(true);
         }
 
-        return view('admin.gudang.barang');
+        return view('admin.barang.barang');
     }
     public function indexStok()
     {
