@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('telepon', 20);
-            $table->mediumText('alamat');
+            $table->bigInteger('alamat_user_id');
             $table->rememberToken();
             $table->string('role');
             $table->timestamps();

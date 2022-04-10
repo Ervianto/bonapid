@@ -20,7 +20,7 @@ class CreateTransaksisTable extends Migration
             $table->string('total_transaksi');
             $table->bigInteger('pesanan_id')->nullable();
             $table->integer('status_transaksi');
-            $table->bigInteger('jasa_ongkir_id');
+            $table->string('jasa_ongkir', 50);
             $table->timestamps();
         });
     }

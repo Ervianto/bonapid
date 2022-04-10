@@ -1,4 +1,11 @@
-/*Template Name: Fruitkha - Responsive Bootstrap4 Shop TemplateTemplate URI: Description: Bootstrap template for fruits or any other kind of shopAuthor: Imran HossainAuthor URI: https://imransdesign.com/Version: 1.0*/
+/*
+Template Name: Fruitkha - Responsive Bootstrap4 Shop Template
+Template URI: 
+Description: Bootstrap template for fruits or any other kind of shop
+Author: Imran Hossain
+Author URI: https://imransdesign.com/
+Version: 1.0
+*/
 /* -----------------------------------------------------------------------------
 
 # Base - Genral & Typography
@@ -432,7 +439,7 @@ a.read-more-btn:hover {
   color: #F28123;
 }
 
-a.boxed-btn, a.bordered-btn, a.cart-btn {
+a.boxed-btn, a.bordered-btn, a.cart-btn, a.beli-btn {
   border-radius: 50px;
 }
 
@@ -1230,10 +1237,15 @@ div.owl-controls div.owl-nav div:hover {
   box-shadow: none;
 }
 
-a.cart-btn {
+a.cart-btn, a.beli-btn {
   -webkit-transition: 0.3s;
   -o-transition: 0.3s;
   transition: 0.3s;
+}
+
+a.beli-btn:hover {
+  background-color: #051922;
+  color: #7f3cf2;
 }
 
 a.cart-btn:hover {
@@ -2437,7 +2449,15 @@ a.cart-btn {
   padding: 10px 20px;
 }
 
-a.cart-btn i {
+a.beli-btn {
+  font-family: 'Poppins', sans-serif;
+  display: inline-block;
+  background-color: #7f3cf2;
+  color: #fff;
+  padding: 10px 20px;
+}
+
+a.cart-btn i, a.beli-btn i {
   margin-right: 5px;
 }
 
@@ -2482,7 +2502,7 @@ input[type="number"] {
   margin-bottom: 15px;
 }
 
-.single-product-form a.cart-btn {
+.single-product-form a.cart-btn, .single-product-form a.beli-btn {
   margin-bottom: 15px;
 }
 
