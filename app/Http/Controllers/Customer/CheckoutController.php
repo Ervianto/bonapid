@@ -14,6 +14,7 @@ use App\Models\DetailTransaksi;
 use App\Models\ButiTransfer;
 use App\Models\Pengiriman;
 use App\Models\Pembayaran;
+use App\Models\PaymentMidtrains;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 use Illuminate\Support\Str;
 use Auth;
@@ -38,7 +39,71 @@ class CheckoutController extends Controller
         $alamatToko = AlamatToko::first();
         $bank = Bank::all();
         $cart = \Cart::getContent();
-        return view('customer.checkout', compact('alamatUser', 'alamatToko', 'cart', 'bank'));
+        return view('customer.billing-address', compact('alamatUser', 'alamatToko', 'cart', 'bank'));
+    }
+
+    public function bayarSekarang(Request $request)
+    {
+        // \Midtrans\Config::$serverKey = config('global.MIDTRAINS_SERVER_KEY');
+        \Midtrans\Config::$serverKey = env('MIDTRAINS_SERVER_KEY');
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        $cart = \Cart::getContent();
+        $itemDetails = [];
+        foreach($cart as $row){
+            array_push($itemDetails, [
+                'id' => $row->id,
+                'name' => $row->name,
+                'price' => $row->price,
+                'quantity' => $row->quantity
+            ]);
+        }
+
+        $jasaOngkir = $request->jasa_ongkir;
+        $kurir = $request->kurir;
+        $lamaSampai = $request->lama_sampai;
+
+        array_push($itemDetails, [
+            'id' => 'ongkir123',
+            'name' => 'JASA ONGKIR '.$kurir,
+            'price' => $jasaOngkir,
+            'quantity' => 1
+        ]);
+
+        $kode = Str::random(16);
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $kode,
+                'gross_amount' => \Cart::getTotal() + $jasaOngkir,
+            ),
+            "item_details" => $itemDetails,
+            'customer_details' => array(
+                'first_name' => Auth::user()->name,
+                'last_name' => '-',
+                'email' => Auth::user()->email,
+                'phone' => Auth::user()->telepon,
+            ),
+        );
+         
+        $snapToken = \Midtrans\Snap::getSnapToken($params); 
+        return view('customer.pembayaran', compact('cart', 'snapToken', 'jasaOngkir', 'kurir', 'lamaSampai'));
+    }
+
+    public function paymentProsess(Request $request)
+    {
+        $json = json_decode($request->json);
+        $order = new PaymentMidtrains();
+        $order->status = $json->transaction_status;
+        $order->transaction_id = $json->transaction_id;
+        $order->order_id = $json->order_id;
+        $order->gross_amount = $json->gross_amount;
+        $order->payment_type = $json->payment_type;
+        $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
+        $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
+        $order->userId = Auth::user()->id;
+        $order->save();
     }
 
     public function checkout(Request $request)

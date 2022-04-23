@@ -22,7 +22,6 @@ Route::get('/signin', [App\Http\Controllers\Customer\AccountController::class, '
 Route::post('/signup', [App\Http\Controllers\Customer\AccountController::class, 'signup'])->name('customer.signup');
 Route::post('/account', [App\Http\Controllers\Customer\AccountController::class, 'index'])->name('customer.account');
 Route::get('/produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'detailProduk']);
-
 Auth::routes();
 
 Route::middleware(['auth'])->group(
@@ -32,8 +31,9 @@ Route::middleware(['auth'])->group(
         Route::resource('customer-cart', App\Http\Controllers\Customer\CartController::class);
         Route::get('/checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'index']);
         Route::post('/check_ongkir', [App\Http\Controllers\Customer\CheckoutController::class, 'check_ongkir']);
-        Route::post('/proses_checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'checkout']);
+        Route::post('/payment', [App\Http\Controllers\Customer\CheckoutController::class, 'bayarSekarang']);
         Route::get('/customer-transaksi', [App\Http\Controllers\Customer\TransaksiController::class, 'index']);
+        Route::post('/payment_midtrains', [App\Http\Controllers\Customer\CheckoutController::class, 'paymentProsess']);
         
         // user admin
         Route::prefix('/admin')->group(function () {
