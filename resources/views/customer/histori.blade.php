@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div class="checkout-section mt-150 mb-150">
+<div class="checkout-section mt-5 mb-5">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -36,13 +36,14 @@
                     </ul>                    
                     <div class="tab-content" id="pills-tabContent">
                         <div class="tab-pane fade show active" id="pills-belum-terbayar" role="tabpanel" aria-labelledby="pills-belum-terbayar-tab">
-                            <table class="table" id="belumTerbayar">
+                            <table class="table" id="belumTerbayar" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <td>No</td>
                                         <td>Tanggal</td>
                                         <td>Kode Transaksi</td>
-                                        <td>Bank Transfer</td>
+                                        <td>Payment</td>
+                                        <td>Va Number</td>
                                         <td>Total Pembelian</td>
                                         <td>Total Ongkir</td>
                                         <td>Total Keseluruhan</td>
@@ -58,19 +59,59 @@
                                             <td>{{ $no }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>{{ $item->kode_tr }}</td>
-                                            <td>{{ $item->nama_bank.' | '.$item->no_rekening }}</td>
-                                            <td>{{ rupiah($item->jasa_ongkir) }}</td>
+                                            <td>
+                                                @if($item->payment_type == 'credit_card')
+                                                    Credit Card 
+                                                @elseif($item->payment_type == 'gopay')
+                                                    Gopay
+                                                @elseif($item->payment_type == 'qris')
+                                                    QRIS
+                                                @elseif($item->payment_type == 'shopeepay')
+                                                    Shopeepay
+                                                @elseif($item->payment_type == 'bank_transfer')
+                                                    Bank Transfer
+                                                @elseif($item->payment_type == 'echannel')
+                                                    Mandiri Bill
+                                                @elseif($item->payment_type == 'bca_klikpay')
+                                                    BCA Klikpay
+                                                @elseif($item->payment_type == 'bca_klikbca')
+                                                    Klik BCA
+                                                @elseif($item->payment_type == 'cimb_clicks')
+                                                    CIMB Clicks
+                                                @elseif($item->payment_type == 'danamon_online')
+                                                    Danamon Online Banking
+                                                @elseif($item->payment_type == 'cstore')
+                                                    Indomaret / Alfamart
+                                                @elseif($item->payment_type == 'akulaku')
+                                                    Akulaku
+                                                @elseif($item->payment_type == 'bri_epay')
+                                                    BRImo
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($item->va_number != null)
+                                                    @php $va = json_decode($item->va_number) @endphp
+                                                    <?= 'Bank : '.$va[0]->bank.'<br/>'.'VA:'.$va[0]->va_number ?>
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
                                             <td>{{ rupiah($item->total_transaksi - $item->jasa_ongkir) }}</td>
+                                            <td>{{ rupiah($item->jasa_ongkir) }}</td>
                                             <td>{{ rupiah($item->total_transaksi) }}</td>
-                                            <td>{{ $item->bukti_transfer == null ? 'Belum Terbayar' : $item->is_verified == 0 ? 'Menunggu Verifikasi' : 'Terverikasi' }}</td>
-                                            <td></td>
+                                            <td>{{ $item->status == 'pending' ? 'Belum Terbayar' :  'Terbayar'}}</td>
+                                            <td>
+                                                <a href="{{ url('customer-transaksi/'.$item->kode) }}" class="btn btn-primary">
+                                                    Detail
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
                         </div>
                         <div class="tab-pane fade" id="pills-pengiriman" role="tabpanel" aria-labelledby="pills-pengiriman-tab">
-                            <table class="table" id="pengirimanBarang">
+                            <table class="table" id="pengirimanBarang" style="width: 100%">
                                 <thead>
                                     <tr>
                                         <td>No</td>

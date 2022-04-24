@@ -71,12 +71,12 @@
                         <!-- menu start -->
                         <nav class="main-menu">
                             <ul>
-                                <li><a href="#">Home</a>
+                                <li><a href="{{ url('/') }}">Home</a>
                                 </li>
                                 <li><a href="#">About</a></li>
                                 <li><a href="#">Contact</a></li>
                                 @if (Auth::check())
-                                    <li><a href="#">Transaksi</a></li>
+                                    <li><a href="{{ url('customer-transaksi') }}">Transaksi</a></li>
                                 @endif
                                 <li>
                                     <div class="header-icons">

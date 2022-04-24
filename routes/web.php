@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(
         Route::post('/check_ongkir', [App\Http\Controllers\Customer\CheckoutController::class, 'check_ongkir']);
         Route::post('/payment', [App\Http\Controllers\Customer\CheckoutController::class, 'bayarSekarang']);
         Route::get('/customer-transaksi', [App\Http\Controllers\Customer\TransaksiController::class, 'index']);
+        Route::get('/customer-transaksi/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'show']);
         Route::post('/payment_midtrains', [App\Http\Controllers\Customer\CheckoutController::class, 'paymentProsess']);
         
         // user admin

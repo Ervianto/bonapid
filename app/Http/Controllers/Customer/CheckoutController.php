@@ -14,9 +14,11 @@ use App\Models\DetailTransaksi;
 use App\Models\ButiTransfer;
 use App\Models\Pengiriman;
 use App\Models\Pembayaran;
+use App\Models\Produk;
 use App\Models\PaymentMidtrains;
 use Kavist\RajaOngkir\Facades\RajaOngkir;
 use Illuminate\Support\Str;
+use DB;
 use Auth;
 
 class CheckoutController extends Controller
@@ -44,7 +46,6 @@ class CheckoutController extends Controller
 
     public function bayarSekarang(Request $request)
     {
-        // \Midtrans\Config::$serverKey = config('global.MIDTRAINS_SERVER_KEY');
         \Midtrans\Config::$serverKey = env('MIDTRAINS_SERVER_KEY');
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
@@ -93,63 +94,66 @@ class CheckoutController extends Controller
 
     public function paymentProsess(Request $request)
     {
-        $json = json_decode($request->json);
-        $order = new PaymentMidtrains();
-        $order->status = $json->transaction_status;
-        $order->transaction_id = $json->transaction_id;
-        $order->order_id = $json->order_id;
-        $order->gross_amount = $json->gross_amount;
-        $order->payment_type = $json->payment_type;
-        $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
-        $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
-        $order->userId = Auth::user()->id;
-        $order->save();
-    }
+        DB::transaction(function() use ($request) {
+            
+            $json = json_decode($request->json);
+            $order = new PaymentMidtrains();
+            $order->status = $json->transaction_status;
+            $order->transaction_id = $json->transaction_id;
+            $order->order_id = $json->order_id;
+            $order->gross_amount = $json->gross_amount;
+            $order->payment_type = $json->payment_type;
+            $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
+            $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
+            $order->userId = Auth::user()->id;
+            $order->va_number = json_encode($json->va_numbers);
+            $order->save();
 
-    public function checkout(Request $request)
-    {
-        $kode = Str::random(16);
-        Transaksi::create([
-            "kode" => $kode,
-            "user_id" => Auth::user()->id,
-            "total_transaksi" => \Cart::getTotal() + $request->jasa_ongkir,
-            "status_transaksi" => 0,
-            "jasa_ongkir" => $request->jasa_ongkir,
-        ]);
-
-        $cart = \Cart::getContent();
-        foreach($cart as $row){
-            DetailTransaksi::create([
-                "kode_transaksi" => $kode,
-                "produk_id" => $row->id,
-                "qty" => $row->quantity,
-                "harga_produk" => $row->price
+            Transaksi::create([
+                "kode" => $json->order_id,
+                "user_id" => Auth::user()->id,
+                "total_transaksi" => $json->gross_amount,
+                "status_transaksi" => 0,
+                "jasa_ongkir" => ($json->gross_amount - \Cart::getTotal()),
             ]);
-        }
+    
+            $cart = \Cart::getContent();
+            foreach($cart as $row){
+                DetailTransaksi::create([
+                    "kode_transaksi" => $json->order_id,
+                    "produk_id" => $row->id,
+                    "qty" => $row->quantity,
+                    "harga_produk" => $row->price
+                ]);
 
-        Pembayaran::create([
-            "kode_transaksi" => $kode,
-            "bank_id" => $request->bank_id,
-            "user_id" => Auth::user()->id
-        ]);
+                $produk = Produk::find($row->id);
+                $produk->stok_produk = ($produk->stok_produk - $row->quantity);
+                $produk->save();
+            }
 
-        Pengiriman::create([
-            "kode_transaksi" => $kode,
-            "status_dikirim" => 0,
-            "status_sampai" => 0,
-            "kurir" => $request->kurir,
-            "lama_sampai" => $request->lama_sampai
-        ]);
-
-        ButiTransfer::create([
-            'kode_transaksi' => $kode,
-            "is_verified" => 0
-        ]);
-
-        \Cart::clear();
-
+            Pengiriman::create([
+                "kode_transaksi" => $json->order_id,
+                "status_dikirim" => 0,
+                "status_sampai" => 0,
+                "kurir" => $request->kurir,
+                "lama_sampai" => $request->lama_sampai
+            ]);
+    
+            // Pembayaran::create([
+            //     "kode_transaksi" => $json->order_id,
+            //     "bank_id" => $request->bank_id,
+            //     "user_id" => Auth::user()->id
+            // ]);
+    
+            // ButiTransfer::create([
+            //     'kode_transaksi' => $json->order_id,
+            //     "is_verified" => 0
+            // ]);
+    
+            \Cart::clear();
+    
+        });
         return redirect('customer-transaksi')->with('success', 'Berhasil melakukan checkout');
-
     }
 
 }
