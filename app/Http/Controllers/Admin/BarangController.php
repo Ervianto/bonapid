@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use PDF;
 use Yajra\Datatables\Datatables;
 use File;
+use Illuminate\Support\Str;
 
 class BarangController extends Controller
 {
@@ -34,7 +35,10 @@ class BarangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $produk = DB::table('produk')->orderBy('nama_produk')->get();
+            $produk = DB::table('produk')
+                ->select('produk.*', 'kategori.nama_kategori')
+                ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+                ->orderBy('nama_produk')->get();
 
             return DataTables::of($produk)
                 ->addColumn('status', function ($row) {
@@ -58,72 +62,74 @@ class BarangController extends Controller
                 ->make(true);
         }
 
-        return view('admin.barang.barang');
+        $kategori = DB::table('kategori')->orderBy('nama_kategori')->get();
+
+        return view('admin.barang.barang', [
+            'kategori'  =>  $kategori
+        ]);
     }
+
     public function indexStok()
     {
         if (request()->ajax()) {
-            $barang = DB::table('barang')
-                ->orderBy('nama')
+            $produk = DB::table('produk')
+                ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+                ->orderBy('nama_produk')
                 ->get();
 
-            return DataTables::of($barang)
-                ->addColumn('stok', function ($row) {
-                    $st = '<span class="badge badge-pill badge-danger"> ' . $row->stok . '</span>';
+            return DataTables::of($produk)
+                ->addColumn('stok_produk', function ($row) {
+                    $st = '<span class="badge badge-pill badge-danger"> ' . $row->stok_produk . '</span>';
                     return $st;
                 })
-                ->rawColumns(['stok'])
+                ->rawColumns(['stok_produk'])
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        return view('it.stok-barang');
+        return view('admin.barang.stok');
     }
     public function store(Request $request)
     {
-        $file = $request->file('barang_gambar');
+        $file = $request->file('foto_produk');
         if ($file == "") {
             $nama_file = "";
         } else {
-            $file->move(public_path('images'), $file->getClientOriginalName());
+            $file->move(public_path('foto/produk'), $file->getClientOriginalName());
             $nama_file = $file->getClientOriginalName();
         }
 
         if ($request->action == 'tambah') {
 
-            if ($file == "") {
-                DB::table('barang')->insert([
-                    'barang_nama'     => $request->barang_nama,
-                    'barang_kode'     => 'BRG' . str_replace('-', '', $request->barang_tgl) . \Carbon\Carbon::now()->format('Hi'),
-                    'barang_tgl'     => $request->barang_tgl,
-                    'barang_satuan'     => $request->barang_satuan,
-                    'barang_stok'     => $request->barang_stok,
-                    'barang_status'     => '0',
-                    'barang_gambar'     => $nama_file,
-                ]);
-            } else {
-                DB::table('barang')->insert([
-                    'barang_nama'     => $request->barang_nama,
-                    'barang_kode'     => 'BRG' . str_replace('-', '', $request->barang_tgl) . \Carbon\Carbon::now()->format('Hi'),
-                    'barang_tgl'     => $request->barang_tgl,
-                    'barang_satuan'     => $request->barang_satuan,
-                    'barang_stok'     => $request->barang_stok,
-                    'barang_status'     => '0',
-                    'barang_gambar'     => $nama_file,
-                ]);
-            }
+            DB::table('produk')->insert([
+                'nama_produk'     => $request->nama_produk,
+                'kode_produk'     => 'BRG' . \Carbon\Carbon::now()->format('Hi') . Str::random(3),
+                'harga_produk'     => $request->harga_produk,
+                'kategori_id'     => $request->kategori_id,
+                'variasi_produk'     => $request->variasi_produk,
+                'ukuran_produk'     => $request->ukuran_produk,
+                'berat_produk'     => $request->berat_produk,
+                'deskripsi_produk'     => $request->deskripsi_produk,
+                'status'     => '0',
+                'stok_produk'     => '0',
+                'foto_produk'     => $nama_file,
+                'created_at'    => \Carbon\Carbon::now()
+            ]);
 
             Alert::success('Sukses', 'Barang Berhasil Ditambah');
             return redirect("/admin/barang");
         } else if ($request->action == 'edit') {
 
-            DB::table('barang')->where('barang_id', $request->barang_id)->update([
-                'barang_nama'     => $request->barang_nama,
-                'barang_kode'     => 'S' . str_replace('-', '', $request->barang_tgl),
-                'barang_tgl'     => $request->barang_tgl,
-                'barang_stok'     => $request->barang_stok,
-                'barang_satuan'     => $request->barang_satuan,
-                'barang_gambar'     => $nama_file,
+            DB::table('produk')->where('id', $request->id)->update([
+                'nama_produk'     => $request->nama_produk,
+                'harga_produk'     => $request->harga_produk,
+                'kategori_id'     => $request->kategori_id,
+                'variasi_produk'     => $request->variasi_produk,
+                'ukuran_produk'     => $request->ukuran_produk,
+                'berat_produk'     => $request->berat_produk,
+                'deskripsi_produk'     => $request->deskripsi_produk,
+                'foto_produk'     => $nama_file,
+                'updated_at'    => \Carbon\Carbon::now()
             ]);
 
             Alert::success('Sukses', 'Barang Berhasil Diedit');
@@ -133,17 +139,19 @@ class BarangController extends Controller
 
     public function edit($id)
     {
-        $barang = DB::table('barang')->where('barang_id', $id)->first();
+        $produk = DB::table('produk')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+            ->where('produk.id', $id)->first();
 
-        return Response::json($barang);
+        return Response::json($produk);
     }
 
     public function destroy(Request $request)
     {
-        $dt = DB::table('barang')->where('barang_id', $request->barang_id1)->first();
-        File::delete('images/' . $dt->barang_gambar);
+        $dt = DB::table('produk')->where('id', $request->id1)->first();
+        File::delete('foto/produk/' . $dt->foto_produk);
 
-        DB::table('barang')->where('barang_id', $request->barang_id1)->delete();
+        DB::table('produk')->where('id', $request->id1)->delete();
 
         Alert::success('Sukses', 'Barang Berhasil Dihapus');
 
@@ -153,12 +161,12 @@ class BarangController extends Controller
     public function tampilkan(Request $request)
     {
         if ($request->status == "display") {
-            DB::table('barang')->where('barang_id', $request->barang_id2)->update([
-                'barang_status'     => '1'
+            DB::table('produk')->where('id', $request->id2)->update([
+                'status'     => '1'
             ]);
         } else {
-            DB::table('barang')->where('barang_id', $request->barang_id2)->update([
-                'barang_status'     => '0'
+            DB::table('produk')->where('id', $request->id2)->update([
+                'status'     => '0'
             ]);
         }
 

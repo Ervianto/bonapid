@@ -51,7 +51,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
                         <h1 class="welcome-text">Haii, <span class="text-black fw-bold">{{Auth::user()->username}}</span></h1>
-                        <h3 class="welcome-sub-text">E-Commerce .... </h3>
+                        <h3 class="welcome-sub-text">E-COMMERCE TOKO PENGRAJIN BONAFIDE KABUPATEN MAGETAN </h3>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -313,21 +313,22 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.html">
+                        <a class="nav-link {{ Route::is('admin.dashboard') ? 'active' : '' }} " href="{{route('admin.dashboard')}}">
                             <i class="mdi mdi-grid-large menu-icon"></i>
                             <span class="menu-title">Dashboard</span>
                         </a>
                     </li>
                     <li class="nav-item nav-category">Menu</li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="false" aria-controls="form-gudang">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang') ? 'true' : 'false' }}" aria-controls="form-gudang">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Gudang</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse" id="form-gudang">
+                        <div class="collapse {{ Route::is('admin.barang') ? 'show' : '' }} " id="form-gudang">
                             <ul class="nav flex-column sub-menu">
-                                <li class="nav-item"><a class="nav-link" href="{{route('admin.barang')}}">Barang</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Barang</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Gambar</a></li>
                                 <li class="nav-item"><a class="nav-link" href="{{route('admin.stok')}}">Stok</a></li>
                             </ul>
                         </div>

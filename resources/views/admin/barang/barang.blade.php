@@ -55,42 +55,62 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 text-md-center">
-                        <img id="barang_gambar1" class="rounded" style="width: 100px;height: 100px;object-fit: cover" src="" alt="">
+                        <img id="foto_produk1" class="rounded" style="width: 100px;height: 100px;object-fit: cover" src="" alt="">
                     </div>
                 </div>
                 <div class="row mt-1">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Kode Barang :</label>
-                            <input type="text" class="form-control" id="barang_kode1" readonly>
+                            <input type="text" class="form-control" id="kode_produk1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-control-label">Nama Barang :</label>
-                            <input type="text" class="form-control" id="barang_nama1" readonly>
+                            <input type="text" class="form-control" id="nama_produk1" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="form-control-label">Satuan :</label>
-                            <input type="text" class="form-control" id="barang_satuan1" readonly>
+                            <label class="form-control-label">Harga :</label>
+                            <input type="text" class="form-control" id="harga_produk1" readonly>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="form-control-label">Quantity :</label>
-                            <input type="text" class="form-control" id="barang_stok1" readonly>
+                            <label class="form-control-label">Ukuran :</label>
+                            <input type="text" class="form-control" id="ukuran_produk1" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="form-control-label">Tanggal :</label>
-                            <input type="text" class="form-control" id="barang_tgl1" readonly>
+                            <label class="form-control-label">Variasi :</label>
+                            <input type="text" class="form-control" id="variasi_produk1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-control-label">Berat :</label>
+                            <input type="text" class="form-control" id="berat_produk1" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-control-label">Kategori :</label>
+                            <input type="text" class="form-control" id="nama_kategori1" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="form-control-label">Deskripsi :</label>
+                            <textarea class="form-control" id="deskripsi_produk1" rows="4" cols="50" readonly></textarea>
                         </div>
                     </div>
                 </div>
@@ -106,7 +126,7 @@
                 <h5 class="modal-title" id="tambahLabel"></h5>
             </div>
             <form action="{{route('admin.barang-tambah')}}" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="barang_id" id="barang_id">
+                <input type="hidden" name="id" id="id">
                 <input type="hidden" name="action" id="action" value="">
                 @csrf
                 <div class="modal-body">
@@ -114,40 +134,62 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class=" form-control-label">Nama Barang :</label>
-                                <input type="text" id="barang_nama" name="barang_nama" placeholder="Masukkan Nama Barang" class="form-control" required>
+                                <input type="text" id="nama_produk" name="nama_produk" placeholder="Masukkan Nama" class="form-control" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Satuan :</label>
-                                <select name="barang_satuan" id="barang_satuan" class="form-control" required>
-                                    <option value="" selected>---</option>
-                                    <option value="Botol 100ml">Botol 100ml</option>
-                                    <option value="Botol 200ml">Botol 200ml</option>
-                                    <option value="Plastik">Plastik</option>
+                                <label class="form-control-label">Kategori :</label>
+                                <select name="kategori_id" id="kategori_id" class="form-control" required>
+                                    <option value="" selected>Pilih Kategori</option>
+                                    @foreach($kategori as $data)
+                                    <option value="{{$data->id}}">{{$data->nama_kategori}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Quantity :</label>
-                                <input type="number" id="barang_stok" name="barang_stok" placeholder="Masukkan Quantity" class="form-control" required>
+                                <label class="form-control-label">Harga :</label>
+                                <input type="number" id="harga_produk" name="harga_produk" placeholder="Masukkan Harga" class="form-control" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label class="form-control-label">Tanggal :</label>
-                                <input type="date" id="barang_tgl" name="barang_tgl" class="form-control" required>
+                                <label class="form-control-label">Ukuran :</label>
+                                <input type="text" id="ukuran_produk" name="ukuran_produk" placeholder="Ukuran" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Berat :</label>
+                                <input type="number" id="berat_produk" name="berat_produk" placeholder="Berat" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-control-label">Variasi :</label>
+                                <input type="text" id="variasi_produk" name="variasi_produk" placeholder="Variasi" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Deskripsi :</label>
+                                <textarea id="deskripsi_produk" name="deskripsi_produk" placeholder="Masukkan Deskripsi" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-control-label">Pilih Gambar :</label>
-                                <input type="file" id="barang_gambar" name="barang_gambar" accept="image/png, image/gif, image/jpeg" class="form-control">
+                                <input type="file" id="foto_produk" name="foto_produk" accept="image/png, image/gif, image/jpeg" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -166,15 +208,11 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="hapusLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <form action="{{route('admin.barang-hapus')}}" method="POST">
                 @csrf
-                <input type="hidden" name="barang_id1" id="barang_id1">
+                <input type="hidden" name="id1" id="id1">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                     <button type="submit" class="btn btn-primary">Ya</button>
                 </div>
             </form>
@@ -187,16 +225,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="tampilkanLabel"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <form action="{{route('admin.barang-tampilkan')}}" method="POST">
                 @csrf
-                <input type="hidden" name="barang_id2" id="barang_id2">
+                <input type="hidden" name="id2" id="id2">
                 <input type="hidden" name="status" id="status" value="">
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                     <button type="submit" class="btn btn-primary">Ya</button>
                 </div>
             </form>
@@ -226,12 +260,12 @@
                     name: 'kode_produk'
                 },
                 {
-                    data: 'produk_nama',
-                    name: 'produk_nama'
+                    data: 'nama_produk',
+                    name: 'nama_produk'
                 },
                 {
-                    data: 'kategori_produk',
-                    name: 'kategori_produk'
+                    data: 'nama_kategori',
+                    name: 'nama_kategori'
                 },
                 {
                     data: 'harga_produk',
@@ -259,19 +293,22 @@
             $.get('barang/' + data_id + '/edit/', function(data) {
                 $('#detailLabel').html("Detail Barang");
                 $('#detail').modal('show');
-                $('#barang_kode1').val(data.barang_kode);
-                $('#barang_nama1').val(data.barang_nama);
-                $('#barang_satuan1').val(data.barang_satuan);
-                $('#barang_stok1').val(data.barang_stok);
-                $('#barang_tgl1').val(data.barang_tgl);
-                $("#barang_gambar1").attr("src", "http://localhost/ecommerce-susu/public/images/" + data.barang_gambar);
+                $('#kode_produk1').val(data.kode_produk);
+                $('#nama_produk1').val(data.nama_produk);
+                $('#nama_kategori1').val(data.nama_kategori);
+                $('#harga_produk1').val(data.harga_produk);
+                $('#variasi_produk1').val(data.variasi_produk);
+                $('#ukuran_produk1').val(data.ukuran_produk);
+                $('#berat_produk1').val(data.berat_produk);
+                $('#deskripsi_produk1').val(data.deskripsi_produk);
+                $("#foto_produk1").attr("src", "http://localhost/ecommerce/public/foto/produk/" + data.foto_produk);
             })
         });
 
-        $('#barang_gambar').bind('change', function() {
+        $('#foto_produk').bind('change', function() {
             if (this.files[0].size >= '2048000') {
                 swal("Error", "File Lebih Dari 2mb!", "error");
-                $('#barang_gambar').val('');
+                $('#foto_produk').val('');
             }
         });
 
@@ -280,11 +317,15 @@
             $('#tambahLabel').html("Tambah Barang");
             $('#tambah').modal('show');
             $('input[name=action]').val('tambah');
-            $('#barang_id').val("");
-            $('#barang_kode').val("");
-            $('#barang_nama').val("");
-            $('#barang_satuan').val("");
-            $('#barang_stok').val("");
+            $('#id').val("");
+            $('#kode_produk').val("");
+            $('#nama_produk').val("");
+            $('#variasi_produk').val("");
+            $('#berat_produk').val("");
+            $('#ukuran_produk').val("");
+            $('#harga_produk').val("");
+            $('#deskripsi_produk').val("");
+            $('#kategori_id').val("");
 
         });
 
@@ -296,11 +337,14 @@
                 $('#btn-save').prop('disabled', false);
                 $('#tambah').modal('show');
                 $('input[name=action]').val('edit');
-                $('#barang_id').val(data.barang_id);
-                $('#barang_satuan').val(data.barang_satuan);
-                $('#barang_nama').val(data.barang_nama);
-                $('#barang_stok').val(data.barang_stok);
-                $('#barang_tgl').val(data.barang_tgl);
+                $('#id').val(data.id);
+                $('#variasi_produk').val(data.variasi_produk);
+                $('#nama_produk').val(data.nama_produk);
+                $('#berat_produk').val(data.berat_produk);
+                $('#kategori_id').val(data.kategori_id);
+                $('#ukuran_produk').val(data.ukuran_produk);
+                $('#harga_produk').val(data.harga_produk);
+                $('#deskripsi_produk').val(data.deskripsi_produk);
             })
         });
 
@@ -311,7 +355,7 @@
                 $('#hapusLabel').html("Hapus Barang");
                 $('#btn-save').prop('disabled', false);
                 $('#hapus').modal('show');
-                $('#barang_id1').val(data.barang_id);
+                $('#id1').val(data.id);
             })
         });
 
@@ -319,17 +363,17 @@
         $('body').on('click', '#btnTampilkan', function() {
             var data_id = $(this).data('id');
             $.get('barang/' + data_id + '/edit', function(data) {
-                if (data.barang_status == "0") {
+                if (data.status == "0") {
                     $('#tampilkanLabel').html("Tampilkan Barang");
                     $('#btn-save').prop('disabled', false);
                     $('#tampilkan').modal('show');
-                    $('#barang_id2').val(data.barang_id);
+                    $('#id2').val(data.id);
                     $('input[name=status]').val('display');
                 } else {
                     $('#tampilkanLabel').html("Hidden Barang");
                     $('#btn-save').prop('disabled', false);
                     $('#tampilkan').modal('show');
-                    $('#barang_id2').val(data.barang_id);
+                    $('#id2').val(data.id);
                     $('input[name=status]').val('hidden');
                 }
             })
