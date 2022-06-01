@@ -97,43 +97,234 @@
                 </div>
             </div>
 
-            <div class="col-md-12 mt-3 mb-3">
-                <div class="card card-body">
-                    <h4>Review Produk</h4>
-                    <label class="ml-3 mt-2">Pilih Bintang</label>
-                    <div class="row col-6 ml-1">
-                        <h1 class="mr-2 cursor-pointer" onclick="pickStar('1')" id="star-1"><span class="fa fa-star-o"
-                                id="item-bintang-1"></span></h1>
-                        <h1 class="mr-2 cursor-pointer" onclick="pickStar('2')" id="star-2"><span class="fa fa-star-o"
-                                id="item-bintang-2"></span></h1>
-                        <h1 class="mr-2 cursor-pointer" onclick="pickStar('3')" id="star-3"><span class="fa fa-star-o"
-                                id="item-bintang-3"></span></h1>
-                        <h1 class="mr-2 cursor-pointer" onclick="pickStar('4')" id="star-4"><span class="fa fa-star-o"
-                                id="item-bintang-4"></span></h1>
-                        <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span class="fa fa-star-o"
-                                id="item-bintang-5"></span></h1>
-                    </div>
-                    <form action="{{ url('store_review') }}" class="col-6" enctype="multipart/form-data"
-                        method="POST">
-                        @csrf
-                        <input type="hidden" name="review_id" id="review_id" />
-                        <input type="hidden" name="bintang" id="bintang" />
-                        <input type="hidden" name="produk_id" value="{{ $produk->id }}" />
-                        <div class="form-group">
-                            <label>Ulasan Produk <strong class="text-danger">*</strong> </label>
-                            <textarea class="form-control" name="ulasan" required placeholder="Ulasan Produk"></textarea>
+            @if (Auth::check())
+                <div class="col-md-12 mt-3 mb-3">
+                    <div class="card card-body">
+                        <div class="p-2 @if ($review == null) hidden @endif" id="sudahReview">
+                            <h5>Review Anda</h5>
+                            @if ($review != null)
+                                @if ($review->bintang == 1)
+                                    <div class="row col-6">
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5><span class="fa fa-star-o"></span></h5>
+                                    </div>
+                                @elseif($review->bintang == 2)
+                                    <div class="row col-6">
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5><span class="fa fa-star-o"></span></h5>
+                                    </div>
+                                @elseif($review->bintang == 3)
+                                    <div class="row col-6">
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning ml-"><span class="fa fa-star"></span></h5>
+                                        <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                        <h5><span class="fa fa-star-o"></span></h5>
+                                    </div>
+                                @elseif($review->bintang == 4)
+                                    <div class="row col-6">
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5><span class="fa fa-star-o"></span></h5>
+                                    </div>
+                                @elseif($review->bintang == 5)
+                                    <div class="row col-6">
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                        <h5 class="text-warning"><span class="fa fa-star"></span></h5>
+                                    </div>
+                                @endif
+                                <p>{{ $review->ulasan }}</p>
+                                @if ($review->foto != null)
+                                    <img id="myImg" class="myImg" width="100"
+                                        src="{{ asset('foto/review/' . $review->foto) }}" />
+                                @endif
+                            @endif
+                            <br /><br />
+                            <button class="btn btn-primary" onclick="editReview()" type="button">Edit</button>
+                            <button class="btn btn-danger" data-toggle="modal" data-target="#modalDelete" type="button">Hapus</button>
                         </div>
-                        <div class="form-group">
-                            <label>Tambahkan Foto</label>
-                            <div class="custom-file">
-                                <input type="file" name="foto" class="custom-file-input" id="customFile" accept="image/*">
-                                <label class="custom-file-label" for="customFile">Ambil file</label>
+
+                        <div id="myModal" class="modalImage">
+                            <span class="close">&times;</span>
+                            <img class="modal-content" id="img">
+                            <div id="caption"></div>
+                        </div>
+
+                        <script>
+                            // Get the modal
+                            var modal = document.getElementById("myModal");
+
+                            // Get the image and insert it inside the modal - use its "alt" text as a caption
+                            var img = document.getElementById("myImg");
+                            var modalImg = document.getElementById("img");
+                            var captionText = document.getElementById("caption");
+                            img.onclick = function() {
+                                console.log(this.src);
+                                modal.style.display = "block";
+                                modalImg.src = this.src;
+                                captionText.innerHTML = this.alt;
+                            }
+
+                            modal.onclick = function() {
+                                modal.style.display = "none";
+                            }
+                        </script>
+
+                        <div id="belumReview" @if ($review != null) class="hidden" @endif>
+                            <h4>Review Produk</h4>
+                            <label class="ml-3 mt-2">Pilih Bintang</label>
+                            <div class="row col-6 ml-1">
+                                @if ($review == null)
+                                    <h1 class="mr-2 cursor-pointer" onclick="pickStar('1')" id="star-1"><span
+                                            class="fa fa-star-o" id="item-bintang-1"></span></h1>
+                                    <h1 class="mr-2 cursor-pointer" onclick="pickStar('2')" id="star-2"><span
+                                            class="fa fa-star-o" id="item-bintang-2"></span></h1>
+                                    <h1 class="mr-2 cursor-pointer" onclick="pickStar('3')" id="star-3"><span
+                                            class="fa fa-star-o" id="item-bintang-3"></span></h1>
+                                    <h1 class="mr-2 cursor-pointer" onclick="pickStar('4')" id="star-4"><span
+                                            class="fa fa-star-o" id="item-bintang-4"></span></h1>
+                                    <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span
+                                            class="fa fa-star-o" id="item-bintang-5"></span></h1>
+                                @else
+                                    @if ($review->bintang == 1)
+                                        <div class="row col-6">
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('1')"
+                                                id="star-1"><span class="fa fa-star" id="item-bintang-1"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('2')" id="star-2"><span
+                                                    class="fa fa-star-o" id="item-bintang-2"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('3')" id="star-3"><span
+                                                    class="fa fa-star-o" id="item-bintang-3"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('4')" id="star-4"><span
+                                                    class="fa fa-star-o" id="item-bintang-4"></span></h1>
+                                            <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span
+                                                    class="fa fa-star-o" id="item-bintang-5"></span></h1>
+                                        </div>
+                                    @elseif($review->bintang == 2)
+                                        <div class="row col-6">
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('1')"
+                                                id="star-1"><span class="fa fa-star" id="item-bintang-1"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('2')"
+                                                id="star-2"><span class="fa fa-star" id="item-bintang-2"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('3')" id="star-3"><span
+                                                    class="fa fa-star-o" id="item-bintang-3"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('4')" id="star-4"><span
+                                                    class="fa fa-star-o" id="item-bintang-4"></span></h1>
+                                            <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span
+                                                    class="fa fa-star-o" id="item-bintang-5"></span></h1>
+                                        </div>
+                                    @elseif($review->bintang == 3)
+                                        <div class="row col-6">
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('1')"
+                                                id="star-1"><span class="fa fa-star " id="item-bintang-1"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('2')"
+                                                id="star-2"><span class="fa fa-star " id="item-bintang-2"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('3')"
+                                                id="star-3"><span class="fa fa-star " id="item-bintang-3"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer" onclick="pickStar('4')" id="star-4"><span
+                                                    class="fa fa-star-o" id="item-bintang-4"></span></h1>
+                                            <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span
+                                                    class="fa fa-star-o" id="item-bintang-5"></span></h1>
+                                        </div>
+                                    @elseif($review->bintang == 4)
+                                        <div class="row col-6">
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('1')"
+                                                id="star-1"><span class="fa fa-star " id="item-bintang-1"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('2')"
+                                                id="star-2"><span class="fa fa-star " id="item-bintang-2"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('3')"
+                                                id="star-3"><span class="fa fa-star " id="item-bintang-3"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('4')"
+                                                id="star-4"><span class="fa fa-star " id="item-bintang-4"></span></h1>
+                                            <h1 class="cursor-pointer" onclick="pickStar('5')" id="star-5"><span
+                                                    class="fa fa-star-o" id="item-bintang-5"></span></h1>
+                                        </div>
+                                    @elseif($review->bintang == 5)
+                                        <div class="row col-6">
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('1')"
+                                                id="star-1"><span class="fa fa-star " id="item-bintang-1"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('2')"
+                                                id="star-2"><span class="fa fa-star " id="item-bintang-2"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('3')"
+                                                id="star-3"><span class="fa fa-star " id="item-bintang-3"></span></h1>
+                                            <h1 class="mr-2 cursor-pointer text-warning" onclick="pickStar('4')"
+                                                id="star-4"><span class="fa fa-star " id="item-bintang-4"></span></h1>
+                                            <h1 class="cursor-pointer text-warning" onclick="pickStar('5')" id="star-5">
+                                                <span class="fa fa-star " id="item-bintang-5"></span>
+                                            </h1>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+                            <form action="{{ url('store_review') }}" class="col-6"
+                                enctype="multipart/form-data" method="POST">
+                                @csrf
+                                <input type="hidden" name="review_id" id="review_id"
+                                    @if ($review != null) value="{{ $review->id }}" @endif />
+                                <input type="hidden" name="bintang" id="bintang"
+                                    @if ($review != null) value="{{ $review->bintang }}" @endif />
+                                <input type="hidden" name="produk_id" value="{{ $produk->id }}" />
+                                <div class="form-group">
+                                    <label>Ulasan Produk <strong class="text-danger">*</strong> </label>
+                                    <textarea class="form-control" name="ulasan" required placeholder="Ulasan Produk">@if ($review != null){{ $review->ulasan }}@endif</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Tambahkan Foto</label>
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="foto" class="custom-file-input" id="customFile"
+                                            accept="image/*">
+                                        <label class="custom-file-label" for="customFile">Ambil file</label>
+                                    </div>
+                                    @if ($review != null)
+                                        @if ($review->foto != null)
+                                            <img id="myImg" class="myImg" width="100"
+                                                src="{{ asset('foto/review/' . $review->foto) }}" />
+                                        @endif
+                                    @endif
+                                </div>
+                                <button class="btn btn-primary" type="submit">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Hapus Review --}}
+            @if ($review != null)
+                <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Konfirmasi</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{{ url('delete-review/' . $review->id) }}">
+                                    @csrf
+                                    <label>Apakah anda yakin menghapus review ini ?</label>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Ya Hapus</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                             </div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Simpan</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            @endif
 
             <div class="col-md-12 mt-3 mb-3">
                 <div class="card card-body">
@@ -142,7 +333,7 @@
                             <h5>{{ $item->name }}</h5>
                             @if ($item->bintang == 1)
                                 <div class="row col-6">
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
@@ -150,43 +341,46 @@
                                 </div>
                             @elseif($item->bintang == 2)
                                 <div class="row col-6">
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
                                     <h5><span class="fa fa-star-o"></span></h5>
                                 </div>
                             @elseif($item->bintang == 3)
                                 <div class="row col-6">
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning ml-"><span class="fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="ml-1"><span class="text-warning fa fa-star"></span></h5>
                                     <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
                                     <h5><span class="fa fa-star-o"></span></h5>
                                 </div>
                             @elseif($item->bintang == 4)
                                 <div class="row col-6">
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class="mr-1"><span class="text-warning fa fa-star"></span></h5>
                                     <h5><span class="fa fa-star-o"></span></h5>
                                 </div>
                             @elseif($item->bintang == 5)
                                 <div class="row col-6">
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
-                                    <h5 class="text-warning"><span class="fa fa-star"></span></h5>
+                                    <h5 class=" mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class=" mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class=" mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5 class=" mr-1"><span class="text-warning fa fa-star"></span></h5>
+                                    <h5><span class="text-warning fa fa-star"></span></h5>
                                 </div>
                             @endif
                             <p>{{ $item->ulasan }}</p>
-                            <img id="myImg{{ $item->id }}" class="myImg" width="100" src="{{ asset('foto/review/' . $item->foto) }}" />
+                            @if ($item->foto != null)
+                                <img id="myImg{{ $item->id }}" class="myImg" width="100"
+                                    src="{{ asset('foto/review/' . $item->foto) }}" />
+                            @endif
                             <hr />
                         </div>
 
-                        <div id="myModal{{ $item->id }}" class="modal">
+                        <div id="myModal{{ $item->id }}" class="modalImage">
                             <span class="close{{ $item->id }}">&times;</span>
                             <img class="modal-content" id="img{{ $item->id }}">
                             <div id="caption"></div>
@@ -195,7 +389,7 @@
                         <script>
                             // Get the modal
                             var modal = document.getElementById("myModal{{ $item->id }}");
-                    
+
                             // Get the image and insert it inside the modal - use its "alt" text as a caption
                             var img = document.getElementById("myImg{{ $item->id }}");
                             var modalImg = document.getElementById("img{{ $item->id }}");
@@ -206,12 +400,11 @@
                                 modalImg.src = this.src;
                                 captionText.innerHTML = this.alt;
                             }
-                    
+
                             modal.onclick = function() {
                                 modal.style.display = "none";
                             }
                         </script>
-
                     @endforeach
                 </div>
             </div>
@@ -324,6 +517,11 @@
                 $("#item-bintang-5").removeClass("fa-star-o");
                 $("#item-bintang-5").addClass("fa-star");
             }
+        }
+
+        function editReview() {
+            $("#belumReview").removeClass("hidden");
+            $("#sudahReview").addClass("hidden");
         }
     </script>
 @endpush

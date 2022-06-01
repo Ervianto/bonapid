@@ -45,6 +45,15 @@
     <link rel="stylesheet" href="{{ asset('landing/click-tap-image/css/image-zoom.css') }}" />
 
     <style>
+
+        .input-password {
+            padding: 12px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
         .cursor-pointer {
             cursor: pointer;
         }
@@ -66,7 +75,7 @@
         }
 
         /* The Modal (background) */
-        .modal {
+        .modalImage {
             display: none;
             /* Hidden by default */
             position: fixed;

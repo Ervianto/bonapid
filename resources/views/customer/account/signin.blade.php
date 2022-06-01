@@ -62,7 +62,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Password :</label>
                                             <p>
-                                                <input type="text" id="password" name="password" placeholder="Masukkan Password" style="width: 100%;" required>
+                                                <input type="password" class="input-password" id="password" name="password" placeholder="Masukkan Password" style="width: 100%;" required>
                                             </p>
                                         </div>
                                         <p><input type="submit" value="Submit"></p>
@@ -105,7 +105,7 @@
                                         <div class="form-group">
                                             <label for="exampleInputPassword1">Password :</label>
                                             <p>
-                                                <input type="text" id="password" name="password" placeholder="Masukkan Password" style="width: 100%;" required>
+                                                <input type="password" class="input-password" id="password" name="password" placeholder="Masukkan Password" style="width: 100%;" required>
                                             </p>
                                         </div>
                                         <p><input type="submit" value="Submit"></p>

@@ -36,7 +36,9 @@ Route::middleware(['auth'])->group(
         Route::get('/customer-transaksi/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'show']);
         Route::post('/payment_midtrains', [App\Http\Controllers\Customer\CheckoutController::class, 'paymentProsess']);
         Route::post('/store_review', [App\Http\Controllers\Customer\DashboardController::class, 'storeReview']);
-        
+        Route::get('/konfirmasi-barang-sampai/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasi']);
+        Route::post('/store_brg_sampai/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiBarangSampai']);
+        Route::post('/delete-review/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'deleteReview']);
         
         // user admin
         Route::prefix('/admin')->group(function () {
