@@ -35,6 +35,8 @@ Route::middleware(['auth'])->group(
         Route::get('/customer-transaksi', [App\Http\Controllers\Customer\TransaksiController::class, 'index']);
         Route::get('/customer-transaksi/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'show']);
         Route::post('/payment_midtrains', [App\Http\Controllers\Customer\CheckoutController::class, 'paymentProsess']);
+        Route::post('/store_review', [App\Http\Controllers\Customer\DashboardController::class, 'storeReview']);
+        
         
         // user admin
         Route::prefix('/admin')->group(function () {
