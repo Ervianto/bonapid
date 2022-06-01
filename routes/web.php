@@ -22,6 +22,7 @@ Route::get('/signin', [App\Http\Controllers\Customer\AccountController::class, '
 Route::post('/signup', [App\Http\Controllers\Customer\AccountController::class, 'signup'])->name('customer.signup');
 Route::post('/account', [App\Http\Controllers\Customer\AccountController::class, 'index'])->name('customer.account');
 Route::get('/produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'detailProduk']);
+Route::get('/get_kota', [App\Http\Controllers\Customer\AccountController::class, 'getCities']);
 Auth::routes();
 
 Route::middleware(['auth'])->group(

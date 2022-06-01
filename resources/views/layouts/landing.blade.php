@@ -42,10 +42,9 @@
     <link rel="stylesheet" href="{{ asset('landing/css/responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('landing/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('landing/click-tap-image/css/image-zoom.css') }}" />
+    <link rel="stylesheet" href="{{ asset('landing/select2/css/select2.min.css') }}" />
 
     <style>
-
         .input-password {
             padding: 12px;
         }
@@ -365,7 +364,7 @@
     <script src="{{ asset('landing/bs-input-file/bs-input-file.min.js') }}"></script>
     <script src="{{ asset('landing/js/main.js') }}"></script>
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
-    <script src="{{ asset('landing/click-tap-image/js/image-zoom.js') }}"></script>
+    <script src="{{ asset('landing/select2/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="SB-Mid-client-bpYW3tQGDJg71pGU"></script>
 
