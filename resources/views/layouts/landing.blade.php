@@ -28,8 +28,6 @@
     <link rel="stylesheet" href="{{ asset('landing/css/all.min.css') }}">
     <!-- bootstrap -->
     <link rel="stylesheet" href="{{ asset('landing/bootstrap/css/bootstrap.min.css') }}">
-    {{-- <!-- owl carousel -->
-    <link rel="stylesheet" href="{{asset('landing/css/owl.carousel.css')}}"> --}}
     <!-- magnific popup -->
     <link rel="stylesheet" href="{{ asset('landing/css/magnific-popup.css') }}">
     <!-- animate css -->
@@ -61,6 +59,11 @@
             width: 100px;
             cursor: pointer;
             margin-top: 0px;
+        }
+
+        .img-carosol {
+            height: 500px;
+            object-fit: cover;
         }
 
         .myImg {
@@ -345,7 +348,7 @@
     <!-- jquery -->
     <script src="{{ asset('landing/js/jquery-1.11.3.min.js') }}"></script>
     <!-- bootstrap -->
-    <script src="{{ asset('landing/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('landing/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- count down -->
     <script src="{{ asset('landing/js/jquery.countdown.js') }}"></script>
     <!-- isotope -->

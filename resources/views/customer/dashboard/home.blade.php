@@ -1,64 +1,36 @@
 @extends('layouts.landing')
 @section('content')
 <!-- home page slider -->
-<div class="homepage-slider">
-    <!-- single home slider -->
-    <div class="single-homepage-slider homepage-bg-1">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-lg-7 offset-lg-1 offset-xl-0">
-                    <div class="hero-text">
-                        <div class="hero-text-tablecell">
-                            <p class="subtitle">Fresh & Organic</p>
-                            <h1>Delicious Seasonal Fruits</h1>
-                            <div class="hero-btns">
-                                <a href="shop.html" class="boxed-btn">Fruit Collection</a>
-                                <a href="contact.html" class="bordered-btn">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    @php $no = 0; @endphp
+    @foreach($events as $event)
+        <li data-target="#carouselExampleCaptions" data-slide-to="{{ $no }}" 
+            @if($no == 0) class="active" @endif></li>
+        @php $no++; @endphp
+    @endforeach
+  </ol>
+  <div class="carousel-inner">
+    @php $no = 0; @endphp
+    @foreach($events as $event)
+        <div class="carousel-item @if($no == 0) active @endif">
+            <img src="{{ asset('foto/events/'.$event->foto_event) }}" class="d-block w-100 img-carosol" alt="...">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>{{ $event->nama_event }}</h5>
+                <p>{{ $event->isi_event }}</p>
             </div>
         </div>
-    </div>
-    <!-- single home slider -->
-    <div class="single-homepage-slider homepage-bg-2">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 offset-lg-1 text-center">
-                    <div class="hero-text">
-                        <div class="hero-text-tablecell">
-                            <p class="subtitle">Fresh Everyday</p>
-                            <h1>100% Organic Collection</h1>
-                            <div class="hero-btns">
-                                <a href="shop.html" class="boxed-btn">Visit Shop</a>
-                                <a href="contact.html" class="bordered-btn">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- single home slider -->
-    <div class="single-homepage-slider homepage-bg-3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-10 offset-lg-1 text-right">
-                    <div class="hero-text">
-                        <div class="hero-text-tablecell">
-                            <p class="subtitle">Mega Sale Going On!</p>
-                            <h1>Get December Discount</h1>
-                            <div class="hero-btns">
-                                <a href="shop.html" class="boxed-btn">Visit Shop</a>
-                                <a href="contact.html" class="bordered-btn">Contact Us</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        @php $no++; @endphp
+    @endforeach
+  </div>
+  <button class="carousel-control-prev" type="button" data-target="#carouselExampleCaptions" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-target="#carouselExampleCaptions" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </button>
 </div>
 <!-- end home page slider -->
 
@@ -84,7 +56,6 @@
                         <p class="product-price">{{ rupiah($item->harga_produk) }}</p>
                         <div class="row justify-content-center">
                             <a href="{{ url('produk/'.$item->id) }}" class="beli-btn mr-3">Detail <i class="fas fa-eye"></i></a>
-                            <a href="cart.html" class="cart-btn">Tambah <i class="fas fa-shopping-cart"></i></a>
                         </div>
                     </div>
                 </div>

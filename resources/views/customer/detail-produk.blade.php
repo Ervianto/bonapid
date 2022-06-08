@@ -53,39 +53,47 @@
                     <table>
                         <tr>
                             <td>
-                                <h3>Sisa</h3>
+                                <h5>Rating</h5>
                             </td>
                             <td>
-                                <h3>{{ $produk->stok_produk }}</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h3>Ukuran</h3>
-                            </td>
-                            <td>
-                                <h3>{{ $produk->ukuran_produk }}</h3>
+                                <h5>{{ ($jumlahBintang->rating / $jumlahReview) }}</h5>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h3>Berat</h3>
+                                <h5>Sisa</h5>
                             </td>
                             <td>
-                                <h3>{{ $produk->berat_produk }} gram</h3>
+                                <h5>{{ $produk->stok_produk }}</h5>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <h3>Variasi</h3>
+                                <h5>Ukuran</h5>
                             </td>
                             <td>
-                                <h3>{{ $produk->variasi_produk }}</h3>
+                                <h5>{{ $produk->ukuran_produk }}</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h5>Berat</h5>
+                            </td>
+                            <td>
+                                <h5>{{ $produk->berat_produk }} gram</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h5>Variasi</h5>
+                            </td>
+                            <td>
+                                <h5>{{ $produk->variasi_produk }}</h5>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <h3>Deskripsi</h3>
+                                <h5>Deskripsi</h5>
                             </td>
                         </tr>
                         <tr>
