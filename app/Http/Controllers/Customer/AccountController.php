@@ -7,13 +7,34 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Alert;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Province;
+use App\Models\City;
+use App\Models\AlamatUser;
 use Validator;
 
 class AccountController extends Controller
 {
     public function signin()
     {
-        return view('customer.account.signin');
+        $provinces = Province::all();
+        return view('customer.account.signin', compact('provinces'));
+    }
+
+    public function getCities(Request $request)
+    {
+        $search = $request->search;
+        $provinsi = $request->provinsi;
+        if ($search != "") {
+            $cities = City::where('province_id', $provinsi)
+                ->where('name', 'like', '%' . $search . '%')
+                ->select('city_id as id', 'name')
+                ->get();
+        } else {
+            $cities = City::where('province_id', $provinsi)
+                ->select('city_id as id', 'name')
+                ->get();
+        }
+        return response()->json($cities);
     }
 
     public function signup(Request $request)
@@ -43,11 +64,18 @@ class AccountController extends Controller
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
 
+        $alamat = new AlamatUser();
+        $alamat->province_id = $request->province_id;
+        $alamat->city_id = $request->city_id;
+        $alamat->kode_pos = $request->kode_pos;
+        $alamat->alamat = $request->alamat;
+        $alamat->save();
+
         DB::table('users')->insert([
             'name'  => $request->name,
             'username'  => $request->username,
             'telepon'  => $request->telepon,
-            // 'alamat'  => $request->alamat,
+            'alamat_user_id'  => $alamat->id,
             'email'  => $request->email,
             'password'  => Hash::make($request->password),
             'role'  => 'customer',
