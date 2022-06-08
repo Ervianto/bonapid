@@ -13,6 +13,7 @@ class Produk extends Model
     protected $table = 'produk';
     protected $fillable = [
         "kategori_id",
+        "kode_produk",
         "nama_produk",
         "stok_produk",
         "harga_produk",
@@ -20,7 +21,8 @@ class Produk extends Model
         "berat_produk",
         "variasi_produk",
         "foto_produk",
-        "deskripsi_produk"
+        "deskripsi_produk",
+        "status"
     ];
 
     public function category()

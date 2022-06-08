@@ -67,8 +67,13 @@ class LoginController extends Controller
                 Alert::success('Sukses', 'Berhasil Login Admin');
                 return redirect('/admin/dashboard');
             } else {
-                Alert::success('Sukses', 'Berhasil Login');
-                return redirect('/');
+                if (auth()->user()->status == "1") {
+                    Alert::success('Sukses', 'Berhasil Login');
+                    return redirect('/');
+                } else {
+                    Alert::error('Gagal', 'Akun Belum Diverifikasi');
+                    return redirect()->route('customer.signin');
+                }
             }
         } else {
             Alert::error('Gagal', 'Akun Belum Terdaftar');

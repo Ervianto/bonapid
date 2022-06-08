@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $produk = Produk::with('category')->get();
+        $produk = Produk::with('category')->where('status', '1')->get();
         return view('customer.dashboard.home', compact('produk'));
     }
 

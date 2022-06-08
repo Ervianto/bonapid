@@ -320,16 +320,28 @@
                     </li>
                     <li class="nav-item nav-category">Menu</li>
                     <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-transaksi" aria-expanded="{{ Route::is('admin.barang') ? 'true' : 'false' }}" aria-controls="form-transaksi">
+                            <i class="menu-icon mdi mdi-card-text-outline"></i>
+                            <span class="menu-title">Transaksi</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse {{ Route::is('admin.transaksi')||Route::is('admin.pengiriman') ? 'show' : '' }} " id="form-transaksi">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.transaksi') ? 'active' : '' }} " href="{{route('admin.transaksi')}}">Pembelian</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.pengiriman') ? 'active' : '' }}" href="{{route('admin.pengiriman')}}">Pengiriman</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang') ? 'true' : 'false' }}" aria-controls="form-gudang">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Gudang</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.barang') ? 'show' : '' }} " id="form-gudang">
+                        <div class="collapse {{ Route::is('admin.barang')||Route::is('admin.stok') ? 'show' : '' }} " id="form-gudang">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Barang</a></li>
-                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Gambar</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{route('admin.stok')}}">Stok</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.stok') ? 'active' : '' }}" href="{{route('admin.stok')}}">Stok</a></li>
                             </ul>
                         </div>
                     </li>
@@ -409,6 +421,32 @@
 
     <script src="{{asset('admin/vendors/select2/select2.min.js')}}"></script>
     <script src="{{asset('admin/js/select2.js')}}"></script>
+    <script type="text/javascript">
+        // rupiah
+        var format = function(num) {
+            var str = num.toString().replace("", ""),
+                parts = false,
+                output = [],
+                i = 1,
+                formatted = null;
+            if (str.indexOf(".") > 0) {
+                parts = str.split(".");
+                str = parts[0];
+            }
+            str = str.split("").reverse();
+            for (var j = 0, len = str.length; j < len; j++) {
+                if (str[j] != ",") {
+                    output.push(str[j]);
+                    if (i % 3 == 0 && j < (len - 1)) {
+                        output.push(",");
+                    }
+                    i++;
+                }
+            }
+            formatted = output.reverse().join("");
+            return ("" + formatted + ((parts) ? "." + parts[1].substr(0, 2) : ""));
+        };
+    </script>
     @stack('scripts')
 </body>
 

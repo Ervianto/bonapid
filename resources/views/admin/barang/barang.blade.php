@@ -269,7 +269,8 @@
                 },
                 {
                     data: 'harga_produk',
-                    name: 'harga_produk'
+                    name: 'harga_produk',
+                    render: $.fn.dataTable.render.number(',', '.', 2, '')
                 },
                 {
                     data: 'status',
@@ -296,7 +297,7 @@
                 $('#kode_produk1').val(data.kode_produk);
                 $('#nama_produk1').val(data.nama_produk);
                 $('#nama_kategori1').val(data.nama_kategori);
-                $('#harga_produk1').val(data.harga_produk);
+                $('#harga_produk1').val(format(data.harga_produk));
                 $('#variasi_produk1').val(data.variasi_produk);
                 $('#ukuran_produk1').val(data.ukuran_produk);
                 $('#berat_produk1').val(data.berat_produk);

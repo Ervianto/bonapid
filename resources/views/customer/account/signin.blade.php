@@ -86,10 +86,10 @@
                                                 <input type="number" id="telepon" placeholder="Masukkan No. Telepon" name="telepon" style="width: 100%;">
                                             </p>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <label for="exampleInputEmail1">Alamat :</label>
                                             <p><textarea name="alamat" id="alamat" cols="30" rows="10" placeholder="Masukkan Alamat"></textarea></p>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Username :</label>
                                             <p>

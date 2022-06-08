@@ -47,10 +47,11 @@ class AccountController extends Controller
             'name'  => $request->name,
             'username'  => $request->username,
             'telepon'  => $request->telepon,
-            'alamat'  => $request->alamat,
+            // 'alamat'  => $request->alamat,
             'email'  => $request->email,
             'password'  => Hash::make($request->password),
-            'role'  => 'customer'
+            'role'  => 'customer',
+            'status'    => '0'
         ]);
 
         Alert::success('Sukses', 'Berhasil Mendaftar Akun');

@@ -35,15 +35,21 @@ Route::middleware(['auth'])->group(
         Route::get('/customer-transaksi', [App\Http\Controllers\Customer\TransaksiController::class, 'index']);
         Route::get('/customer-transaksi/{id}', [App\Http\Controllers\Customer\TransaksiController::class, 'show']);
         Route::post('/payment_midtrains', [App\Http\Controllers\Customer\CheckoutController::class, 'paymentProsess']);
-        
+
         // user admin
         Route::prefix('/admin')->group(function () {
 
             // dashboard
             Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
-            // stok
-            Route::get('/stok', [App\Http\Controllers\Admin\BarangController::class, 'index'])->name('admin.stok');
+            // transaksi
+            Route::get('/transaksi', [App\Http\Controllers\Admin\TransaksiController::class, 'index'])->name('admin.transaksi');
+            Route::get('/transaksi/{id}/edit', [App\Http\Controllers\Admin\TransaksiController::class, 'edit']);
+            Route::post('/transaksi/hapus', [App\Http\Controllers\Admin\TransaksiController::class, 'destroy'])->name('admin.transaksi-hapus');
+
+            // pengiriman
+            Route::get('/pengiriman', [App\Http\Controllers\Admin\PengirimanController::class, 'index'])->name('admin.pengiriman');
+            Route::get('/pengiriman/{id}/edit', [App\Http\Controllers\Admin\PengirimanController::class, 'edit']);
 
             // kategori
             Route::get('/kategori', [App\Http\Controllers\Admin\KategoriController::class, 'index'])->name('admin.kategori');
@@ -58,11 +64,15 @@ Route::middleware(['auth'])->group(
             Route::post('/barang/hapus', [App\Http\Controllers\Admin\BarangController::class, 'destroy'])->name('admin.barang-hapus');
             Route::post('/barang/tampilkan', [App\Http\Controllers\Admin\BarangController::class, 'tampilkan'])->name('admin.barang-tampilkan');
 
+            // stok
+            Route::get('/stok', [App\Http\Controllers\Admin\BarangController::class, 'indexStok'])->name('admin.stok');
+
             // user
             Route::get('/user', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user');
             Route::post('/user/tambah', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.user-tambah');
             Route::get('/user/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit']);
             Route::post('/user/hapus', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.user-hapus');
+            Route::patch('/user/update', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.user-update');
 
             // about
             Route::get('/about', function () {

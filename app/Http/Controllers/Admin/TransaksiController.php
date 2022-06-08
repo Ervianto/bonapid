@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -15,7 +14,7 @@ use Yajra\Datatables\Datatables;
 use File;
 use Illuminate\Support\Str;
 
-class BarangController extends Controller
+class TransaksiController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -35,38 +34,41 @@ class BarangController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $produk = DB::table('produk')
-                ->select('produk.*', 'kategori.nama_kategori')
-                ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
-                ->orderBy('nama_produk')->get();
+            $transaksi = DB::table('transaksi')
+                ->select('transaksi.*', 'users.name', 'pm.status')
+                ->join('users', 'users.id', '=', 'transaksi.user_id')
+                ->join('payment_midtrains as pm', 'pm.order_id', '=', 'transaksi.kode')
+                ->orderByDesc('transaksi.created_at')->get();
 
-            return DataTables::of($produk)
-                ->addColumn('status', function ($row) {
-                    if ($row->status == 0) {
-                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-lock"></i> Hidden</a>';
+            return DataTables::of($transaksi)
+                ->addColumn('status_pembayaran', function ($row) {
+                    if ($row->status == "settlement") {
+                        $data = 'SUDAH TERBAYAR';
                     } else {
-                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text btn-lg" id="btnTampilkan" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-lock-open"></i> Display</a>';
+                        $data = 'MENUNGGU DIBAYAR';
+                    }
+                    return $data;
+                })
+                ->addColumn('status_trx', function ($row) {
+                    if ($row->status_transaksi == "0") {
+                        $data = 'BELUM';
+                    } else {
+                        $data = 'SELESAI';
                     }
                     return $data;
                 })
                 ->addColumn('aksi', function ($row) {
-                    $data = '<a href="javascript:void(0)" class="btn btn-info btn-icon-text" id="btnDetail" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-eye"></i></a>
-                                        <a href="javascript:void(0)" class="btn btn-warning btn-icon-text" id="btnEdit" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-pencil-box"></i></a>
-                                        <meta name="csrf-token" content="{{ csrf_token() }}">
-                                        <a href="javascript:void(0)" class="btn btn-danger btn-icon-text" id="btnHapus" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-trash-can-outline"></i></a>
+                    $data = '<a href="javascript:void(0)" class="btn btn-info btn-icon-text" id="btnDetail" data-toggle="modal" data-id="' . $row->kode . '"><i class="mdi mdi-eye"></i></a>
+                                        <a href="javascript:void(0)" class="btn btn-danger btn-icon-text" id="btnHapus" data-toggle="modal" data-id="' . $row->kode . '"><i class="mdi mdi-trash-can-outline"></i></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">';
                     return $data;
                 })
-                ->rawColumns(['aksi', 'status'])
+                ->rawColumns(['aksi', 'status_pembayaran', 'status_trx'])
                 ->addIndexColumn()
                 ->make(true);
         }
 
-        $kategori = DB::table('kategori')->orderBy('nama_kategori')->get();
-
-        return view('admin.barang.barang', [
-            'kategori'  =>  $kategori
-        ]);
+        return view('admin.transaksi.transaksi');
     }
 
     public function indexStok()

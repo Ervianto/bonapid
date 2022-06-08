@@ -71,6 +71,7 @@ class RegisterController extends Controller
             'role' => 'customer',
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'status'   => '0'
         ]);
     }
 }
