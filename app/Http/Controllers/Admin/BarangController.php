@@ -98,14 +98,6 @@ class BarangController extends Controller
     }
     public function store(Request $request)
     {
-        $file = $request->file('foto_produk');
-        if ($file == "") {
-            $nama_file = "";
-        } else {
-            $file->move(public_path('foto/produk'), $file->getClientOriginalName());
-            $nama_file = $file->getClientOriginalName();
-        }
-
         if ($request->action == 'tambah') {
 
             DB::table('produk')->insert([
@@ -119,7 +111,6 @@ class BarangController extends Controller
                 'deskripsi_produk'     => $request->deskripsi_produk,
                 'status'     => '0',
                 'stok_produk'     => '0',
-                'foto_produk'     => $nama_file,
                 'created_at'    => \Carbon\Carbon::now()
             ]);
 
@@ -127,30 +118,16 @@ class BarangController extends Controller
             return redirect("/admin/barang");
         } else if ($request->action == 'edit') {
 
-            if ($request->file('foto_produk') == "") {
-                DB::table('produk')->where('id', $request->id)->update([
-                    'nama_produk'     => $request->nama_produk,
-                    'harga_produk'     => $request->harga_produk,
-                    'kategori_id'     => $request->kategori_id,
-                    'variasi_produk'     => $request->variasi_produk,
-                    'ukuran_produk'     => $request->ukuran_produk,
-                    'berat_produk'     => $request->berat_produk,
-                    'deskripsi_produk'     => $request->deskripsi_produk,
-                    'updated_at'    => \Carbon\Carbon::now()
-                ]);
-            } else {
-                DB::table('produk')->where('id', $request->id)->update([
-                    'nama_produk'     => $request->nama_produk,
-                    'harga_produk'     => $request->harga_produk,
-                    'kategori_id'     => $request->kategori_id,
-                    'variasi_produk'     => $request->variasi_produk,
-                    'ukuran_produk'     => $request->ukuran_produk,
-                    'berat_produk'     => $request->berat_produk,
-                    'deskripsi_produk'     => $request->deskripsi_produk,
-                    'foto_produk'     => $nama_file,
-                    'updated_at'    => \Carbon\Carbon::now()
-                ]);
-            }
+            DB::table('produk')->where('id', $request->id)->update([
+                'nama_produk'     => $request->nama_produk,
+                'harga_produk'     => $request->harga_produk,
+                'kategori_id'     => $request->kategori_id,
+                'variasi_produk'     => $request->variasi_produk,
+                'ukuran_produk'     => $request->ukuran_produk,
+                'berat_produk'     => $request->berat_produk,
+                'deskripsi_produk'     => $request->deskripsi_produk,
+                'updated_at'    => \Carbon\Carbon::now()
+            ]);
 
             Alert::success('Sukses', 'Barang Berhasil Diedit');
             return redirect("/admin/barang");

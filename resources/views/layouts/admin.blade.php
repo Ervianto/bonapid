@@ -89,7 +89,7 @@
                                 <p class="mb-1 mt-3 font-weight-semibold">{{Auth::user()->name}}</p>
                                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
                             </div>
-                            <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profile </a>
+                            <!-- <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profile </a> -->
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -116,7 +116,7 @@
                     </li>
                     <li class="nav-item nav-category">Menu</li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-transaksi" aria-expanded="{{ Route::is('admin.barang') ? 'true' : 'false' }}" aria-controls="form-transaksi">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-transaksi" aria-expanded="{{ Route::is('admin.transaksi')||Route::is('admin.pengiriman') ? 'true' : 'false' }}" aria-controls="form-transaksi">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Transaksi</span>
                             <i class="menu-arrow"></i>
@@ -142,12 +142,12 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-informasi" aria-expanded="{{ Route::is('admin.alamat-toko')||Route::is('admin.review') ? 'true' : 'false' }}" aria-controls="form-informasi">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-informasi" aria-expanded="{{ Route::is('admin.alamat-toko')||Route::is('admin.review') ||Route::is('admin.event') ? 'true' : 'false' }}" aria-controls="form-informasi">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Informasi</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.alamat-toko')||Route::is('admin.review') ? 'show' : '' }} " id="form-informasi">
+                        <div class="collapse {{ Route::is('admin.alamat-toko')||Route::is('admin.review') ||Route::is('admin.event') ? 'show' : '' }} " id="form-informasi">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.alamat-toko') ? 'active' : '' }}" href="{{route('admin.alamat-toko')}}">Alamat Toko</a></li>
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.event') ? 'active' : '' }} " href="{{route('admin.event')}}">Event</a></li>
@@ -156,14 +156,15 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang') ? 'true' : 'false' }}" aria-controls="form-gudang">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk') ? 'true' : 'false' }}" aria-controls="form-gudang">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Gudang</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.barang')||Route::is('admin.stok') ? 'show' : '' }} " id="form-gudang">
+                        <div class="collapse {{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk') ? 'show' : '' }} " id="form-gudang">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Barang</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.foto-produk') ? 'active' : '' }} " href="{{route('admin.foto-produk')}}">Foto Produk</a></li>
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.stok') ? 'active' : '' }}" href="{{route('admin.stok')}}">Stok</a></li>
                             </ul>
                         </div>

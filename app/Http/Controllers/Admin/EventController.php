@@ -81,8 +81,8 @@ class EventController extends Controller
                 'nama_event'     => $request->nama_event,
                 'foto_event'    => $nama_file,
                 'isi_event'    => $request->isi_event,
-                'tanggal_mulai_event'    => $request->tanggal_mulai_event,
-                'tanggal_selesai_event'    => $request->tanggal_selesai_event,
+                'tanggal_mulai_event'    => $request->tanggal_mulai_event . ' ' . $request->jam_mulai_event,
+                'tanggal_selesai_event'    => $request->tanggal_selesai_event . ' ' . $request->jam_selesai_event,
                 'is_active'    => '0',
                 'created_at'    => \Carbon\Carbon::now()
             ]);
@@ -95,8 +95,8 @@ class EventController extends Controller
                 DB::table('event')->where('id', $request->id)->update([
                     'nama_event'     => $request->nama_event,
                     'isi_event'    => $request->isi_event,
-                    'tanggal_mulai_event'    => $request->tanggal_mulai_event,
-                    'tanggal_selesai_event'    => $request->tanggal_selesai_event,
+                    'tanggal_mulai_event'    => $request->tanggal_mulai_event . ' ' . $request->jam_mulai_event,
+                    'tanggal_selesai_event'    => $request->tanggal_selesai_event . ' ' . $request->jam_selesai_event,
                     'updated_at'    => \Carbon\Carbon::now()
                 ]);
             } else {
@@ -104,8 +104,8 @@ class EventController extends Controller
                     'nama_event'     => $request->nama_event,
                     'foto_event'    => $nama_file,
                     'isi_event'    => $request->isi_event,
-                    'tanggal_mulai_event'    => $request->tanggal_mulai_event,
-                    'tanggal_selesai_event'    => $request->tanggal_selesai_event,
+                    'tanggal_mulai_event'    => $request->tanggal_mulai_event . ' ' . $request->jam_mulai_event,
+                    'tanggal_selesai_event'    => $request->tanggal_selesai_event . ' ' . $request->jam_selesai_event,
                     'updated_at'    => \Carbon\Carbon::now()
                 ]);
             }
@@ -117,7 +117,7 @@ class EventController extends Controller
 
     public function edit($id)
     {
-        $event = DB::table('event')
+        $event = DB::table('event')->select('*', DB::raw('DATE_FORMAT(tanggal_mulai_event,"%Y-%m-%d") as tgl_mulai'), DB::raw('DATE_FORMAT(tanggal_mulai_event,"%H:%i") as jam_mulai'), DB::raw('DATE_FORMAT(tanggal_selesai_event,"%Y-%m-%d") as tgl_selesai'), DB::raw('DATE_FORMAT(tanggal_selesai_event,"%H:%i") as jam_selesai'))
             ->where('id', $id)->first();
 
         return Response::json($event);

@@ -53,11 +53,6 @@
                 <h5 class="modal-title" id="detailLabel"></h5>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 text-md-center">
-                        <img id="foto_produk1" class="rounded" style="width: 100px;height: 100px;object-fit: cover" src="" alt="">
-                    </div>
-                </div>
                 <div class="row mt-1">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -185,14 +180,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-control-label">Pilih Gambar :</label>
-                                <input type="file" id="foto_produk" name="foto_produk" accept="image/png, image/gif, image/jpeg" class="form-control">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -302,15 +289,7 @@
                 $('#ukuran_produk1').val(data.ukuran_produk);
                 $('#berat_produk1').val(data.berat_produk);
                 $('#deskripsi_produk1').val(data.deskripsi_produk);
-                $("#foto_produk1").attr("src", "http://localhost/ecommerce/public/foto/produk/" + data.foto_produk);
             })
-        });
-
-        $('#foto_produk').bind('change', function() {
-            if (this.files[0].size >= '2048000') {
-                swal("Error", "File Lebih Dari 2mb!", "error");
-                $('#foto_produk').val('');
-            }
         });
 
         // modal tambah

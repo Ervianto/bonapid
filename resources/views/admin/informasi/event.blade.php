@@ -83,18 +83,30 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class=" form-control-label">Tanggal Mulai Event :</label>
                                 <input type="date" id="tanggal_mulai_event" name="tanggal_mulai_event" placeholder="Masukkan Tanggal Mulai Event" class="form-control">
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class=" form-control-label">Jam Mulai Event :</label>
+                                <input type="time" id="jam_mulai_event" name="jam_mulai_event" placeholder="Masukkan Jam Mulai Event" class="form-control">
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label class=" form-control-label">Tanggal Selesai Event :</label>
                                 <input type="date" id="tanggal_selesai_event" name="tanggal_selesai_event" placeholder="Masukkan Tanggal Selesai Event" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class=" form-control-label">Jam Selesai Event :</label>
+                                <input type="time" id="jam_selesai_event" name="jam_selesai_event" placeholder="Masukkan Jam Selesai Event" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -188,6 +200,8 @@
             $('#isi_event').val("");
             $('#tanggal_mulai_event').val("");
             $('#tanggal_selesai_event').val("");
+            $('#jam_mulai_event').val("");
+            $('#jam_selesai_event').val("");
         });
 
         // modal edit
@@ -201,8 +215,10 @@
                 $('#id').val(data.id);
                 $('#nama_event').val(data.nama_event);
                 $('#isi_event').val(data.isi_event);
-                $('#tanggal_mulai_event').val(data.tanggal_mulai_event);
-                $('#tanggal_selesai_event').val(data.tanggal_selesai_event);
+                $('#tanggal_mulai_event').val(data.tgl_mulai);
+                $('#tanggal_selesai_event').val(data.tgl_selesai);
+                $('#jam_mulai_event').val(data.jam_mulai);
+                $('#jam_selesai_event').val(data.jam_selesai);
             })
         });
 

@@ -44,8 +44,8 @@ Route::middleware(['auth'])->group(
 
             // menu laporan
             // laporan transaksi
-            Route::get('/laporan-transaksi', [App\Http\Controllers\Admin\LaporanController::class, 'indexTrx'])->name('admin.laporan-transaksi');
-            Route::get('/laporan-stok', [App\Http\Controllers\Admin\LaporanController::class, 'indexStok'])->name('admin.laporan-stok');
+            Route::get('/laporan-trx', [App\Http\Controllers\Admin\LaporanController::class, 'indexTrx'])->name('admin.laporan-transaksi');
+            Route::get('/laporan-stk', [App\Http\Controllers\Admin\LaporanController::class, 'indexStok'])->name('admin.laporan-stok');
 
             // menu transaksi
             // transaksi
@@ -84,6 +84,12 @@ Route::middleware(['auth'])->group(
             Route::get('/barang/{id}/edit', [App\Http\Controllers\Admin\BarangController::class, 'edit']);
             Route::post('/barang/hapus', [App\Http\Controllers\Admin\BarangController::class, 'destroy'])->name('admin.barang-hapus');
             Route::post('/barang/tampilkan', [App\Http\Controllers\Admin\BarangController::class, 'tampilkan'])->name('admin.barang-tampilkan');
+
+            // foto-produk
+            Route::get('/foto-produk', [App\Http\Controllers\Admin\FotoProdukController::class, 'index'])->name('admin.foto-produk');
+            Route::post('/foto-produk/tambah', [App\Http\Controllers\Admin\FotoProdukController::class, 'store'])->name('admin.foto-produk-tambah');
+            Route::get('/foto-produk/{id}/edit', [App\Http\Controllers\Admin\FotoProdukController::class, 'edit']);
+            Route::post('/foto-produk/hapus', [App\Http\Controllers\Admin\FotoProdukController::class, 'destroy'])->name('admin.foto-produk-hapus');
 
             // stok
             Route::get('/stok', [App\Http\Controllers\Admin\BarangController::class, 'indexStok'])->name('admin.stok');
