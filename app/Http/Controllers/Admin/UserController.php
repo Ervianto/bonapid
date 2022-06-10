@@ -141,16 +141,14 @@ class UserController extends Controller
     public function validasi(Request $request)
     {
         if ($request->status == "0") {
-            DB::table('users')->where('id', $request->id2)->update([
+            DB::table('users')->where('id', $request->id)->update([
                 'status'     => '1'
             ]);
         } else {
-            DB::table('users')->where('id', $request->id2)->update([
+            DB::table('users')->where('id', $request->id)->update([
                 'status'     => '0'
             ]);
         }
-
-        Alert::success('Sukses', 'User Berhasil Divalidasi');
 
         return redirect("/admin/user");
     }

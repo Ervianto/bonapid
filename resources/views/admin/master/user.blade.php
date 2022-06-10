@@ -224,7 +224,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-control-label">Role :</label>
-                                <select name="role" id="role" class="js-example-basic-single w-100" style="width: 100%;" required>
+                                <select name="role" id="role" class="form-control" required>
                                     <option value="" selected>---</option>
                                     <option value="admin">admin</option>
                                     <option value="customer">customer</option>

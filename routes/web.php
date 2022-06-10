@@ -42,21 +42,42 @@ Route::middleware(['auth'])->group(
             // dashboard
             Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
+            // menu laporan
+            // laporan transaksi
+            Route::get('/laporan-transaksi', [App\Http\Controllers\Admin\LaporanController::class, 'indexTrx'])->name('admin.laporan-transaksi');
+            Route::get('/laporan-stok', [App\Http\Controllers\Admin\LaporanController::class, 'indexStok'])->name('admin.laporan-stok');
+
+            // menu transaksi
             // transaksi
             Route::get('/transaksi', [App\Http\Controllers\Admin\TransaksiController::class, 'index'])->name('admin.transaksi');
+            Route::post('/transaksi/detail', [App\Http\Controllers\Admin\TransaksiController::class, 'detail']);
             Route::get('/transaksi/{id}/edit', [App\Http\Controllers\Admin\TransaksiController::class, 'edit']);
             Route::post('/transaksi/hapus', [App\Http\Controllers\Admin\TransaksiController::class, 'destroy'])->name('admin.transaksi-hapus');
 
             // pengiriman
             Route::get('/pengiriman', [App\Http\Controllers\Admin\PengirimanController::class, 'index'])->name('admin.pengiriman');
             Route::get('/pengiriman/{id}/edit', [App\Http\Controllers\Admin\PengirimanController::class, 'edit']);
+            Route::post('/pengiriman/kirim', [App\Http\Controllers\Admin\PengirimanController::class, 'kirim'])->name('admin.pengiriman-kirim');
 
-            // kategori
-            Route::get('/kategori', [App\Http\Controllers\Admin\KategoriController::class, 'index'])->name('admin.kategori');
-            Route::post('/kategori/tambah', [App\Http\Controllers\Admin\KategoriController::class, 'store'])->name('admin.kategori-tambah');
-            Route::get('/kategori/{id}/edit', [App\Http\Controllers\Admin\KategoriController::class, 'edit']);
-            Route::post('/kategori/hapus', [App\Http\Controllers\Admin\KategoriController::class, 'destroy'])->name('admin.kategori-hapus');
+            // menu informasi
+            // alamat toko
+            Route::get('/alamat-toko', [App\Http\Controllers\Admin\AlamatTokoController::class, 'index'])->name('admin.alamat-toko');
+            Route::get('/alamat-toko/{id}/edit', [App\Http\Controllers\Admin\AlamatTokoController::class, 'edit']);
+            Route::post('/alamat-toko/update', [App\Http\Controllers\Admin\AlamatTokoController::class, 'update'])->name('admin.alamat-toko-update');
 
+            // review
+            Route::get('/review', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('admin.review');
+            Route::get('/review/{id}/edit', [App\Http\Controllers\Admin\ReviewController::class, 'edit']);
+            Route::post('/review/hapus', [App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('admin.review-hapus');
+
+            // event
+            Route::get('/event', [App\Http\Controllers\Admin\EventController::class, 'index'])->name('admin.event');
+            Route::post('/event/tambah', [App\Http\Controllers\Admin\EventController::class, 'store'])->name('admin.event-tambah');
+            Route::get('/event/{id}/edit', [App\Http\Controllers\Admin\EventController::class, 'edit']);
+            Route::post('/event/hapus', [App\Http\Controllers\Admin\EventController::class, 'destroy'])->name('admin.event-hapus');
+            Route::post('/event/update', [App\Http\Controllers\Admin\EventController::class, 'update'])->name('admin.event-update');
+
+            // menu gudang
             // barang
             Route::get('/barang', [App\Http\Controllers\Admin\BarangController::class, 'index'])->name('admin.barang');
             Route::post('/barang/tambah', [App\Http\Controllers\Admin\BarangController::class, 'store'])->name('admin.barang-tambah');
@@ -67,6 +88,13 @@ Route::middleware(['auth'])->group(
             // stok
             Route::get('/stok', [App\Http\Controllers\Admin\BarangController::class, 'indexStok'])->name('admin.stok');
 
+            // menu master
+            // kategori
+            Route::get('/kategori', [App\Http\Controllers\Admin\KategoriController::class, 'index'])->name('admin.kategori');
+            Route::post('/kategori/tambah', [App\Http\Controllers\Admin\KategoriController::class, 'store'])->name('admin.kategori-tambah');
+            Route::get('/kategori/{id}/edit', [App\Http\Controllers\Admin\KategoriController::class, 'edit']);
+            Route::post('/kategori/hapus', [App\Http\Controllers\Admin\KategoriController::class, 'destroy'])->name('admin.kategori-hapus');
+
             // user
             Route::get('/user', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user');
             Route::post('/user/tambah', [App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.user-tambah');
@@ -76,8 +104,8 @@ Route::middleware(['auth'])->group(
 
             // about
             Route::get('/about', function () {
-                return view('admin.about');
-            })->name('admin.about');
+                return view('about');
+            })->name('about');
         });
     }
 );
