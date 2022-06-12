@@ -71,7 +71,7 @@
                             <thead>
                                 <tr>
                                     <th>Pembayaran</th>
-                                    <th>VA</th>
+                                    <th>Akun Pembayaran</th>
                                     <th>Total Dibayar</th>
                                     <th>Status</th>
                                 </tr>
@@ -108,17 +108,35 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($transaksi->va_number != null)
+                                        @if ($transaksi->va_number != null)
                                             @php $va = json_decode($transaksi->va_number) @endphp
-                                            <?= 'Bank : '.$va[0]->bank.'<br/>'.'VA:'.$va[0]->va_number ?>
-                                        @else
-                                            -
+                                            <?= 'Bank : ' . $va[0]->bank . '<br/>' . 'VA:' . $va[0]->va_number ?>
+                                        @elseif($transaksi->payment_type == 'echannel')
+                                            Bill Key : {{ $transaksi->bill_key }}<br/>
+                                            Bill Code : {{ $transaksi->biller_code }}
+                                        @elseif($transaksi->payment_type == 'cstore')
+                                            Payment Code : {{ $transaksi->payment_code }}
+                                        @elseif($transaksi->payment_type == 'gopay')
+                                            QR Code Pembayaran : <a target="_blank" href="https://api.sandbox.midtrans.com/v2/gopay/{{ $item->transaction_id }}/qr-code">
+                                            Lihat QR code</a>
                                         @endif
                                     </td>
                                     <td>
                                         {{ $transaksi->jasa_ongkir + $total }}
                                     </td>
                                     <td>{{ $transaksi->status == 'pending' ? 'Belum Terbayar' :  'Terbayar'}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">Konfirmasi Pembayaran</td>
+                                    <td>
+                                        @if($transaksi->status == 'pending')
+                                            <a class="btn btn-block btn-primary" href="{{ url("konfirmasi_pembayaran/".$transaksi->order_id) }}">
+                                                Konfirmasi Pembayaran
+                                            </a>
+                                        @else 
+                                            <span class="text-success">Sudah Terbayar</span>
+                                        @endif
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

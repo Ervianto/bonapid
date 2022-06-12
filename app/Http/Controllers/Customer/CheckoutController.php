@@ -39,14 +39,13 @@ class CheckoutController extends Controller
     {
         $alamatUser = AlamatUser::find(Auth::user()->alamat_user_id);
         $alamatToko = AlamatToko::first();
-        $bank = Bank::all();
         $cart = \Cart::getContent();
-        return view('customer.billing-address', compact('alamatUser', 'alamatToko', 'cart', 'bank'));
+        return view('customer.billing-address', compact('alamatUser', 'alamatToko', 'cart'));
     }
 
     public function bayarSekarang(Request $request)
     {
-        \Midtrans\Config::$serverKey = env('MIDTRAINS_SERVER_KEY');
+        \Midtrans\Config::$serverKey = "SB-Mid-server-ww7EY1Y7hf7gPPy86a3QAyLQ";
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
@@ -106,7 +105,13 @@ class CheckoutController extends Controller
             $order->payment_code = isset($json->payment_code) ? $json->payment_code : null;
             $order->pdf_url = isset($json->pdf_url) ? $json->pdf_url : null;
             $order->userId = Auth::user()->id;
-            $order->va_number = json_encode($json->va_numbers);
+            if($json->payment_type == 'bank_transfer'){
+                $order->va_number = json_encode($json->va_numbers);
+            }
+            if($json->payment_type == 'echannel'){
+                $order->bill_key = $json->bill_key;
+                $order->biller_code = $json->biller_code;
+            }
             $order->save();
 
             Transaksi::create([

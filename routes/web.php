@@ -18,15 +18,14 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('customer.dashboard');
+Route::get('/home', [App\Http\Controllers\Customer\DashboardController::class, 'index'])->name('home');
 Route::get('/signin', [App\Http\Controllers\Customer\AccountController::class, 'signin'])->name('customer.signin');
 Route::post('/signup', [App\Http\Controllers\Customer\AccountController::class, 'signup'])->name('customer.signup');
-Route::post('/account', [App\Http\Controllers\Customer\AccountController::class, 'index'])->name('customer.account');
 Route::get('/produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'detailProduk']);
 Auth::routes();
 
 Route::middleware(['auth'])->group(
     function () {
-        Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
         Route::resource('customer-cart', App\Http\Controllers\Customer\CartController::class);
         Route::get('/checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'index']);
@@ -113,5 +112,19 @@ Route::middleware(['auth'])->group(
                 return view('about');
             })->name('about');
         });
+
+
+        Route::get('/account', [App\Http\Controllers\Customer\AccountController::class, 'index'])->name('customer.account');
+        Route::post('/update_akun', [App\Http\Controllers\Customer\AccountController::class, 'updateAkun']);
+        Route::post('/store_review', [App\Http\Controllers\Customer\DashboardController::class, 'storeReview']);
+        Route::get('/konfirmasi_pembayaran/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiPembayaran']);
+        Route::get('/konfirmasi-barang-sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasi']);
+        Route::post('/store_brg_sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiBarangSampai']);
+        
     }
 );
+
+Route::get('/get_kota', [App\Http\Controllers\Customer\AccountController::class, 'getCities']);
+Route::get('/about', function () {
+    return view('customer.account.about');
+});

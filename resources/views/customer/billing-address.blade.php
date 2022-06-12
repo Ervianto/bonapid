@@ -76,7 +76,7 @@
                                                 <div class="form-group">
                                                     <label>Pilih Jasa Pengiriman</label>
                                                     <div class="input-group">
-                                                        <select class="custom-select" onchange="changeJasaKirim()" required name="kurir"
+                                                        <select class="custom-select" required name="kurir"
                                                             id="jasaPengiriman">
                                                             <option value="">Pilih Jasa Pengiriman</option>
                                                             <option value="jne">JNE</option>
@@ -120,13 +120,8 @@
         const jasaPengiriman = document.querySelector("#jasaPengiriman");
         const lanjutPembayaran = document.querySelector("#lanjutPembayaran");
     
-        function changeJasaKirim() {
-            var data = jasaPengiriman.value;
-            if(data != ""){
-                lanjutPembayaran.removeAttribute("disabled");
-            }else{
-                lanjutPembayaran.setAttribute("disabled", true);
-            }
+        function pilihJasaKirim() {
+            lanjutPembayaran.removeAttribute("disabled");
         }
 
         cekOngkir.addEventListener("click", function() {
@@ -152,7 +147,7 @@
                             console.log(row);
                             console.log(row.cost[0]);
                             $("#listOngkir").append(
-                                '<div><input class="form-check-input" type="radio" name="jasa_ongkir" id="inlineRadio' +
+                                '<div><input class="form-check-input" type="radio" onclick="pilihJasaKirim()" name="jasa_ongkir" id="inlineRadio' +
                                 row.service + '" value="' + row.cost[0].value +
                                 '"> <label class="form-check-label" for="inlineRadio' +
                                 row.service + '">' + row.description + ' ' + row

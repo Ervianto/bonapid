@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\DetailTransaksi;
 use App\Models\Pengiriman;
+use App\Models\PaymentMidtrains;
 use RealRashid\SweetAlert\Facades\Alert;
 use Auth;
 
@@ -25,7 +26,8 @@ class TransaksiController extends Controller
             ->select('transaksi.*', 'pengiriman.kurir', 'pengiriman.lama_sampai', 
                 'pengiriman.status_sampai', 'pengiriman.status_dikirim', 
                 \DB::raw('CONCAT("BONA","-", transaksi.id, "-", transaksi.user_id) as kode_tr'),
-                'md.payment_type', 'md.status', 'md.va_number')
+                'md.payment_type', 'md.status', 'md.va_number', 'md.bill_key', 'md.biller_code', 'md.payment_code',
+                'md.transaction_id')
             ->orderBy('transaksi.created_at', 'DESC')
             ->get();
         $transaksiBlmSelesaipembayaran = Transaksi::join('pengiriman', 'pengiriman.kode_transaksi', '=', 'transaksi.kode')
@@ -37,7 +39,7 @@ class TransaksiController extends Controller
             ->select('transaksi.*', 'pengiriman.kurir', 'pengiriman.lama_sampai', 
                 'pengiriman.status_sampai', 'pengiriman.status_dikirim', 
                 \DB::raw('CONCAT("BONA","-", transaksi.id, "-", transaksi.user_id) as kode_tr'),
-                'md.payment_type', 'md.status', 'md.va_number')
+                'md.payment_type', 'md.status', 'md.va_number', 'md.bill_key', 'md.biller_code', 'md.payment_code', 'md.transaction_id')
             ->orderBy('transaksi.created_at', 'DESC')
             ->get();
         $transaksiPengiriman = Transaksi::join('pengiriman', 'pengiriman.kode_transaksi', '=', 'transaksi.kode')
@@ -65,7 +67,8 @@ class TransaksiController extends Controller
             ->select('transaksi.*', 'pengiriman.kurir', 'pengiriman.lama_sampai', 
                 'pengiriman.status_sampai', 'pengiriman.status_dikirim', 
                 \DB::raw('CONCAT("BONA","-", transaksi.id, "-", transaksi.user_id) as kode_tr'),
-                'md.payment_type', 'md.status', 'md.va_number')
+                'md.payment_type', 'md.status', 'md.va_number', 'md.bill_key', 'md.biller_code', 'md.payment_code', 'md.transaction_id',
+                'md.order_id')
             ->first();
         $detailTransaksi = DetailTransaksi::join('produk', 'produk.id', '=', 'detail_transaksi.produk_id')
             ->where('detail_transaksi.kode_transaksi', $id)
@@ -105,6 +108,43 @@ class TransaksiController extends Controller
         ]);
         Alert::success('Sukses', 'Terimakasih sudah berbelanja pada toko kami');
         return redirect()->back();
+    }
+
+    public function konfirmasiPembayaran($orderId)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://api.sandbox.midtrans.com/v2/" . $orderId . "/status",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_POSTFIELDS => "",
+            CURLOPT_HTTPHEADER => [
+                "Authorization: Basic U0ItTWlkLXNlcnZlci13dzdFWTFZN2hmN2dQUHk4NmEzUUF5TFE=",
+                "Content-Type: application/json"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            Alert::error('Error', 'Konfirmasi Pembayaran Gagal');
+            return redirect()->back();
+        } else {
+            $data = json_decode($response, true);
+            PaymentMidtrains::where('order_id', $orderId)->update([
+                'status' => $data['transaction_status']
+            ]);
+            Alert::success('Sukses', 'Konfirmasi Pembayaran Berhasil');
+            return redirect()->back();
+        }
     }
 
 }

@@ -16,7 +16,6 @@
         .hidden {
             display: none;
         }
-
     </style>
 
     <!-- favicon -->
@@ -173,7 +172,6 @@
                 width: 100%;
             }
         }
-
     </style>
 </head>
 
@@ -206,8 +204,8 @@
                             <ul>
                                 <li><a href="{{ url('/') }}">Home</a>
                                 </li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Contact</a></li>
+                                <li><a href="{{ url('/about') }}">About</a></li>
+                                {{-- <li><a href="#">Contact</a></li> --}}
                                 @if (Auth::check())
                                     <li><a href="{{ url('customer-transaksi') }}">Transaksi</a></li>
                                 @endif
@@ -256,10 +254,13 @@
                 <div class="col-lg-12">
                     <span class="close-btn"><i class="fas fa-window-close"></i></span>
                     <div class="search-bar">
+
                         <div class="search-bar-tablecell">
                             <h3>Pencarian :</h3>
-                            <input type="text" placeholder="Masukkan Nama Barang">
-                            <button type="submit">Search <i class="fas fa-search"></i></button>
+                            <form action="{{ route('home') }}" method="GET">
+                                <input type="text" name="search" placeholder="Masukkan Nama Barang">
+                                <button type="submit">Search <i class="fas fa-search"></i></button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -272,54 +273,6 @@
     @yield('content')
 
     <!-- footer -->
-    <div class="footer-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box about-widget">
-                        <h2 class="widget-title">About us</h2>
-                        <p>Ut enim ad minim veniam perspiciatis unde omnis iste natus error sit voluptatem accusantium
-                            doloremque laudantium, totam rem aperiam, eaque ipsa quae.</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box get-in-touch">
-                        <h2 class="widget-title">Get in Touch</h2>
-                        <ul>
-                            <li>34/8, East Hukupara, Gifirtok, Sadan.</li>
-                            <li>support@fruitkha.com</li>
-                            <li>+00 111 222 3333</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box pages">
-                        <h2 class="widget-title">Pages</h2>
-                        <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="about.html">About</a></li>
-                            <li><a href="services.html">Shop</a></li>
-                            <li><a href="news.html">News</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-box subscribe">
-                        <h2 class="widget-title">Subscribe</h2>
-                        <p>Subscribe to our mailing list to get the latest updates.</p>
-                        <form action="index.html">
-                            <input type="email" placeholder="Email">
-                            <button type="submit"><i class="fas fa-paper-plane"></i></button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end footer -->
-
-    <!-- copyright -->
     <div class="copyright">
         <div class="container">
             <div class="row">

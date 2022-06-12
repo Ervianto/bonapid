@@ -14,12 +14,18 @@ use App\Models\Event;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $tglNow = Carbon::now()->format('Y-m-d');
         $events = Event::where('is_active', 1)
             ->get();
-        $produk = Produk::with('category')->where('status', '1')->get();
+        if($request->search != ''){
+            $produk = Produk::with('category')->where('status', '1')
+                ->where('nama_produk', 'like', '%'.$request->search.'%')
+                ->paginate(10);
+        }else{
+            $produk = Produk::with('category')->where('status', '1')->paginate(10);
+        }
         return view('customer.dashboard.home', compact('produk', 'events'));
     }
 

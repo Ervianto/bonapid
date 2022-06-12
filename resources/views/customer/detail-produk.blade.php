@@ -56,7 +56,7 @@
                                 <h5>Rating</h5>
                             </td>
                             <td>
-                                <h5>{{ ($jumlahBintang->rating / $jumlahReview) }}</h5>
+                                <h5>{{ $jumlahBintang != null ? ($jumlahBintang->rating / $jumlahReview) : "Belum ada penilaian" }}</h5>
                             </td>
                         </tr>
                         <tr>

@@ -49,7 +49,7 @@
                                             <td>Tanggal</td>
                                             <td>Kode Transaksi</td>
                                             <td>Payment</td>
-                                            <td>Va Number</td>
+                                            <td>Akun Pembayaran</td>
                                             <td>Total Pembelian</td>
                                             <td>Total Ongkir</td>
                                             <td>Total Keseluruhan</td>
@@ -98,8 +98,14 @@
                                                     @if ($item->va_number != null)
                                                         @php $va = json_decode($item->va_number) @endphp
                                                         <?= 'Bank : ' . $va[0]->bank . '<br/>' . 'VA:' . $va[0]->va_number ?>
-                                                    @else
-                                                        -
+                                                    @elseif($item->payment_type == 'echannel')
+                                                        Bill Key : {{ $item->bill_key }}<br/>
+                                                        Bill Code : {{ $item->biller_code }}
+                                                    @elseif($item->payment_type == 'cstore')
+                                                        Payment Code : {{ $item->payment_code }}
+                                                    @elseif($item->payment_type == 'gopay')
+                                                        QR Code Pembayaran : <a target="_blank" href="https://api.sandbox.midtrans.com/v2/gopay/{{ $item->transaction_id }}/qr-code">
+                                                        Lihat QR code</a>
                                                     @endif
                                                 </td>
                                                 <td>{{ rupiah($item->total_transaksi - $item->jasa_ongkir) }}</td>
@@ -169,7 +175,7 @@
                                             <td>Tanggal</td>
                                             <td>Kode Transaksi</td>
                                             <td>Payment</td>
-                                            <td>Va Number</td>
+                                            <td>Akun Pembayaran</td>
                                             <td>Total Pembelian</td>
                                             <td>Total Ongkir</td>
                                             <td>Total Keseluruhan</td>
@@ -218,8 +224,11 @@
                                                     @if ($item->va_number != null)
                                                         @php $va = json_decode($item->va_number) @endphp
                                                         <?= 'Bank : ' . $va[0]->bank . '<br/>' . 'VA:' . $va[0]->va_number ?>
-                                                    @else
-                                                        -
+                                                    @elseif($item->payment_type == 'echannel')
+                                                        Bill Key : {{ $item->bill_key }}<br/>
+                                                        Bill Code : {{ $item->biller_code }}
+                                                    @elseif($item->payment_type == 'cstore')
+                                                        Payment Code : {{ $item->payment_code }}
                                                     @endif
                                                 </td>
                                                 <td>{{ rupiah($item->total_transaksi - $item->jasa_ongkir) }}</td>

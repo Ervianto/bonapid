@@ -106,13 +106,13 @@
                     /* You may add your own implementation here */
                     alert('you closed the popup without finishing the payment');
                 }
-            })
+            });
         });
 
         function sendResponseToForm(result){
             document.getElementById("json_callback").value = JSON.stringify(result);
             $("#submitForm").submit();
-            // console.log(document.getElementById("json_callback").value);
+            console.log(document.getElementById("json_callback").value);
         }
     </script>
 @endpush
