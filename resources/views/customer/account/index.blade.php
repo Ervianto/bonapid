@@ -58,6 +58,14 @@
                                         </select>
                                     </p>
                                 </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Kode Pos :</label>
+                                    <input class="form-control" name="kode_pos" value="{{ $user->kode_pos }}" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Alamat :</label>
+                                    <textarea class="form-control" name="alamat">{{ $user->alamat }}</textarea>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <h4>Akun :</h4>

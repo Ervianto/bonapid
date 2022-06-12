@@ -23,8 +23,7 @@ class AccountController extends Controller
             ->where('users.id', \Auth::user()->id)
             ->select('users.*', 'alamat.province_id', 'alamat.city_id', 'alamat.kode_pos', 'alamat.alamat')
             ->first();
-        $cities = City::where('province_id', $user->province_id)
-            ->select('city_id as id', 'name')
+        $cities = City::select('city_id as id', 'name')
             ->get();
         return view('customer.account.index', compact('user', 'provinces', 'cities'));
     }
@@ -41,27 +40,27 @@ class AccountController extends Controller
                     Alert::error('Gagal', 'Password Baru dengan Konfirmasi Password Tidak Sama');
                     return redirect()->back();
                 }
-            } else {
                 $user->password = Hash::make($password_baru);
+            } else {
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->telepon = $request->telepon;
+                $user->username = $request->username;
+                $user->save();
+
+                $alamat = AlamatUser::find($user->alamat_user_id);
+                $alamat->province_id = $request->province_id;
+                $alamat->city_id = $request->city_id;
+                $alamat->kode_pos = $request->kode_pos;
+                $alamat->alamat = $request->alamat;
+                $alamat->save();
+                Alert::success('Sukses', 'Berhasil mengubah data user');
+                return redirect()->back();
             }
         } else {
             Alert::error('Gagal', 'Password anda tidak cocok dengan password anda login');
             return redirect()->back();
         }
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->telepon = $request->telepon;
-        $user->username = $request->username;
-        $user->save();
-
-        $alamat = AlamatUser::find($user->alamat_user_id);
-        $alamat->province_id = $alamat->province_id;
-        $alamat->city_id = $alamat->city_id;
-        $alamat->kode_pos = $alamat->kode_pos;
-        $alamat->alamat = $alamat->alamat;
-        $alamat->save();
-        Alert::success('Sukses', 'Berhasil mengubah data user');
-        return redirect()->back();
     }
 
     public function signin()
