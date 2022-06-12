@@ -26,33 +26,33 @@
                                 <div class="statistics-details d-flex align-items-center justify-content-between">
                                     <div>
                                         <p class="statistics-title">Barang</p>
-                                        <h3 class="rate-percentage">{{$total_brg}}</h3>
+                                        <h3 class="rate-percentage" id="total_brg">{{$total_brg}}</h3>
                                     </div>
                                     <div>
                                         <p class="statistics-title">Transaksi</p>
-                                        <h3 class="rate-percentage">{{$total_trx}}</h3>
+                                        <h3 class="rate-percentage" id="total_trx">{{$total_trx}}</h3>
                                     </div>
                                     <div class="d-none d-md-block">
                                         <p class="statistics-title">Transaksi Belum Bayar</p>
-                                        <h3 class="rate-percentage">{{$total_trx_blm_bayar}}</h3>
+                                        <h3 class="rate-percentage" id="total_trx_blm_bayar">{{$total_trx_blm_bayar}}</h3>
                                     </div>
                                     <div class="d-none d-md-block">
                                         <p class="statistics-title">Transaksi Sudah Bayar</p>
-                                        <h3 class="rate-percentage">{{$total_trx_sdh_bayar}}</h3>
+                                        <h3 class="rate-percentage" id="total_trx_sdh_bayar">{{$total_trx_sdh_bayar}}</h3>
                                     </div>
                                     <div class="d-none d-md-block">
                                         <p class="statistics-title">Transaksi Sudah Kirim</p>
-                                        <h3 class="rate-percentage">{{$total_trx_sdh_kirim}}</h3>
+                                        <h3 class="rate-percentage" id="total_trx_sdh_kirim">{{$total_trx_sdh_kirim}}</h3>
                                     </div>
                                     <div class="d-none d-md-block">
                                         <p class="statistics-title">Transaksi Sudah Sampai</p>
-                                        <h3 class="rate-percentage">{{$total_trx_sdh_sampai}}</h3>
+                                        <h3 class="rate-percentage" id="total_trx_sdh_sampai">{{$total_trx_sdh_sampai}}</h3>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 d-flex flex-column">
+                            <div class="col-lg-6 d-flex flex-column">
                                 <div class="row flex-grow">
                                     <div class="col-12 grid-margin stretch-card">
                                         <div class="card card-rounded">
@@ -73,16 +73,14 @@
                                                     </div> -->
                                                 </div>
                                                 <div class="chartjs-bar-wrapper mt-3">
-                                                    <div id="chart1"></div>
+                                                    <canvas id="pieChart" style="height: 230px;"></canvas>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-12 d-flex flex-column">
+                            <div class="col-lg-6 d-flex flex-column">
                                 <div class="row flex-grow">
                                     <div class="col-12 grid-margin stretch-card">
                                         <div class="card card-rounded">
@@ -103,7 +101,7 @@
                                                     </div> -->
                                                 </div>
                                                 <div class="chartjs-bar-wrapper mt-3">
-                                                    <div id="chart2"></div>
+                                                    <canvas id="barChart" style="height: 230px;"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -120,70 +118,173 @@
 <!-- content-wrapper ends -->
 @endsection
 @push('scripts')
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    //chart1
-    google.charts.load("current", {
-        packages: ["corechart"]
-    });
-
-    google.charts.setOnLoadCallback(drawChart);
-    google.charts.setOnLoadCallback(drawChart1);
-
-
-    //chart
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Produk', 'Total'],
-            <?php
-            foreach ($trx_produk as $data) {
-                echo "['" . $data->nama_produk .
-                    "', " . $data->total .
-                    "],";
-            };
-            ?>
-        ]);
+<script>
+    $(function() {
 
         var options = {
-            title: '',
-            width: 600,
-            height: 400,
-            is3D: true,
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('chart1'));
-        chart.draw(data, options);
-    }
-
-    function drawChart1() {
-        var data = google.visualization.arrayToDataTable([
-            ['Produk', 'Total'],
-
-            <?php
-            foreach ($trx_user as $data) {
-                echo "['" . $data->username .
-                    "', " . $data->total .
-                    "],";
-            };
-            ?>
-        ]);
-
-        var options = {
-            title: '',
-            width: 1000,
-            height: 450,
-            bar: {
-                groupWidth: "80%"
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
             },
             legend: {
-                position: "right"
+                display: false
             },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            }
+
         };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart2'));
-        chart.draw(data, options);
-    }
+        var barChartCanvas = $("#barChart").get(0).getContext("2d");
+        // This will get the first returned node in the jQuery collection.
+        var barChart = new Chart(barChartCanvas, {
+            type: 'bar',
+            data: {},
+            options: options
+        });
+
+        var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
+        var pieChart = new Chart(pieChartCanvas, {
+            type: 'pie',
+            data: {},
+            options: {}
+        });
+        $("#filter").click(function() {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.dashboard-statistik') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    tgl_awal: $('#tgl_awal').val(),
+                    tgl_akhir: $('#tgl_akhir').val()
+                },
+                success: function(response) {
+                    $('#total_brg').html(response.total_brg);
+                    $('#total_trx').html(response.total_trx);
+                    $('#total_trx_blm_bayar').html(response.total_trx_blm_bayar);
+                    $('#total_trx_sdh_bayar').html(response.total_trx_sdh_bayar);
+                    $('#total_trx_sdh_kirim').html(response.total_trx_sdh_kirim);
+                    $('#total_trx_sdh_sampai').html(response.total_trx_sdh_sampai);
+                },
+                error: function(xhr) {
+
+                }
+            });
+            /* ChartJS
+             * -------
+             * Data and config for chartjs
+             */
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.dashboard-chart1') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    tgl_awal: $('#tgl_awal').val(),
+                    tgl_akhir: $('#tgl_akhir').val()
+                },
+                success: function(response) {
+                    var labels = response.data.map(function(e) {
+                        return e.username
+                    })
+
+                    var dt = response.data.map(function(e) {
+                        return e.total
+                    })
+
+                    var data = {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Data Penjualan',
+                            data: dt,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1,
+                            fill: false
+                        }]
+                    };
+
+                    barChart.data = data;
+                    barChart.update();
+                },
+                error: function(xhr) {
+
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.dashboard-chart2') }}",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    tgl_awal: $('#tgl_awal').val(),
+                    tgl_akhir: $('#tgl_akhir').val()
+                },
+                success: function(response) {
+                    console.log(response);
+                    var label = response.data.map(function(e) {
+                        return e.nama_produk
+                    })
+
+                    var dt = response.data.map(function(e) {
+                        return e.total
+                    })
+                    var doughnutPieData = {
+                        datasets: [{
+                            data: dt,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                        }],
+
+                        // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: label
+                    };
+                    var doughnutPieOptions = {
+                        responsive: true,
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    };
+
+                    pieChart.data = doughnutPieData;
+                    pieChart.options = doughnutPieOptions;
+                    pieChart.update();
+                }
+            });
+        });
+    });
 </script>
 @endpush

@@ -41,6 +41,9 @@ Route::middleware(['auth'])->group(
 
             // dashboard
             Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
+            Route::post('/dashboard/statistik', [App\Http\Controllers\Admin\DashboardController::class, 'statistik'])->name('admin.dashboard-statistik');
+            Route::post('/dashboard/chart1', [App\Http\Controllers\Admin\DashboardController::class, 'chart1'])->name('admin.dashboard-chart1');
+            Route::post('/dashboard/chart2', [App\Http\Controllers\Admin\DashboardController::class, 'chart2'])->name('admin.dashboard-chart2');
 
             // menu laporan
             // laporan transaksi
