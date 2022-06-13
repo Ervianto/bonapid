@@ -13,7 +13,7 @@ class PaymentHandlerController extends Controller
     {
         $json = json_decode($request->getContent());
 
-        $signature_key = hash('sha512', $json->order_id.$json->status_code.$json->gross_amount."SB-Mid-server-ww7EY1Y7hf7gPPy86a3QAyLQ");
+        $signature_key = hash('sha512', $json->order_id.$json->status_code.$json->gross_amount."SB-Mid-server-HQxOHvetNXC2CiUFk7rmudNe");
         
         if($signature_key != $json->signature_key){
             return abort(404);

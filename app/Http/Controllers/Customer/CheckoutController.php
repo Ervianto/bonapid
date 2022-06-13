@@ -45,7 +45,7 @@ class CheckoutController extends Controller
 
     public function bayarSekarang(Request $request)
     {
-        \Midtrans\Config::$serverKey = "SB-Mid-server-ww7EY1Y7hf7gPPy86a3QAyLQ";
+        \Midtrans\Config::$serverKey = "SB-Mid-server-HQxOHvetNXC2CiUFk7rmudNe";
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;

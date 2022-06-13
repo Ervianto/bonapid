@@ -124,7 +124,7 @@ class TransaksiController extends Controller
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_POSTFIELDS => "",
             CURLOPT_HTTPHEADER => [
-                "Authorization: Basic U0ItTWlkLXNlcnZlci13dzdFWTFZN2hmN2dQUHk4NmEzUUF5TFE=",
+                "Authorization: Basic U0ItTWlkLXNlcnZlci1IUXhPSHZldE5YQzJDaVVGazdybXVkTmU=",
                 "Content-Type: application/json"
             ],
         ]);

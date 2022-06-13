@@ -322,7 +322,7 @@
     <script src="{{ asset('vendor/DataTables/datatables.min.js') }}"></script>
     <script src="{{ asset('landing/select2/js/select2.min.js') }}"></script>
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="SB-Mid-client-bpYW3tQGDJg71pGU"></script>
+        data-client-key="SB-Mid-client-RuqVzBovLvbbSKaW"></script>
 
     <script>
         $(document).ready(function() {
