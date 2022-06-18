@@ -208,6 +208,7 @@
                                 {{-- <li><a href="#">Contact</a></li> --}}
                                 @if (Auth::check())
                                     <li><a href="{{ url('customer-transaksi') }}">Transaksi</a></li>
+                                    <li><a href="{{ url('pre-order') }}">Pre-Order</a></li>
                                 @endif
                                 <li>
                                     <div class="header-icons">
@@ -229,7 +230,7 @@
                                             <a href="{{ route('customer.signin') }}"><i class="fas fa-user"></i>
                                                 Masuk</a>
                                         @endif
-                                        <a class="shopping-cart" href="cart.html"><i
+                                        <a class="shopping-cart" href="#"><i
                                                 class="fas fa-shopping-cart"></i></a>
                                         <a class="mobile-hide search-bar-icon" href="#"><i
                                                 class="fas fa-search"></i></a>

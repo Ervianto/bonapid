@@ -124,6 +124,13 @@ Route::middleware(['auth'])->group(
         Route::get('/konfirmasi-barang-sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasi']);
         Route::post('/store_brg_sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiBarangSampai']);
         
+        Route::resource('pre-order', App\Http\Controllers\Customer\PreOrderController::class);
+        Route::post('finish-pre-order', [App\Http\Controllers\Customer\PreOrderController::class, 'finishOrder']);
+        Route::post('batal-pre-order/{id}', [App\Http\Controllers\Customer\PreOrderController::class, 'batalPreOrder']);
+        Route::post('billing-address-pre-order', [App\Http\Controllers\Customer\PreOrderController::class, 'billingPreOrder']);
+        Route::post('payment_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'bayarSekarang']);
+        Route::post('payment_proses_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'paymentProsess']);
+        
     }
 );
 
