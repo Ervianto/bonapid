@@ -116,14 +116,15 @@
                     </li>
                     <li class="nav-item nav-category">Menu</li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-transaksi" aria-expanded="{{ Route::is('admin.transaksi')||Route::is('admin.pengiriman') ? 'true' : 'false' }}" aria-controls="form-transaksi">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-transaksi" aria-expanded="{{ Route::is('admin.transaksi')||Route::is('admin.pengiriman')||Route::is('admin.preorder') ? 'true' : 'false' }}" aria-controls="form-transaksi">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Transaksi</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.transaksi')||Route::is('admin.pengiriman') ? 'show' : '' }} " id="form-transaksi">
+                        <div class="collapse {{ Route::is('admin.transaksi')||Route::is('admin.pengiriman')||Route::is('admin.preorder') ? 'show' : '' }} " id="form-transaksi">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.transaksi') ? 'active' : '' }} " href="{{route('admin.transaksi')}}">Pembelian</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.preorder') ? 'active' : '' }} " href="{{route('admin.preorder')}}">Pre Order</a></li>
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.pengiriman') ? 'active' : '' }}" href="{{route('admin.pengiriman')}}">Pengiriman</a></li>
                             </ul>
                         </div>

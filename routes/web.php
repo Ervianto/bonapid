@@ -56,6 +56,13 @@ Route::middleware(['auth'])->group(
             Route::get('/transaksi/{id}/edit', [App\Http\Controllers\Admin\TransaksiController::class, 'edit']);
             Route::post('/transaksi/hapus', [App\Http\Controllers\Admin\TransaksiController::class, 'destroy'])->name('admin.transaksi-hapus');
 
+            // preorder
+            Route::get('/preorder', [App\Http\Controllers\Admin\PreOrderController::class, 'index'])->name('admin.preorder');
+            Route::post('/preorder/detail', [App\Http\Controllers\Admin\PreOrderController::class, 'detail']);
+            Route::get('/preorder/{id}/edit', [App\Http\Controllers\Admin\PreOrderController::class, 'edit']);
+            Route::post('/preorder/kirim', [App\Http\Controllers\Admin\PreOrderController::class, 'update'])->name('admin.preorder-update');
+            Route::post('/preorder/hapus', [App\Http\Controllers\Admin\PreOrderController::class, 'destroy'])->name('admin.preorder-hapus');
+
             // pengiriman
             Route::get('/pengiriman', [App\Http\Controllers\Admin\PengirimanController::class, 'index'])->name('admin.pengiriman');
             Route::get('/pengiriman/{id}/edit', [App\Http\Controllers\Admin\PengirimanController::class, 'edit']);
@@ -123,14 +130,13 @@ Route::middleware(['auth'])->group(
         Route::get('/konfirmasi_pembayaran/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiPembayaran']);
         Route::get('/konfirmasi-barang-sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasi']);
         Route::post('/store_brg_sampai/{orderId}', [App\Http\Controllers\Customer\TransaksiController::class, 'konfirmasiBarangSampai']);
-        
+
         Route::resource('pre-order', App\Http\Controllers\Customer\PreOrderController::class);
         Route::post('finish-pre-order', [App\Http\Controllers\Customer\PreOrderController::class, 'finishOrder']);
         Route::post('batal-pre-order/{id}', [App\Http\Controllers\Customer\PreOrderController::class, 'batalPreOrder']);
         Route::post('billing-address-pre-order', [App\Http\Controllers\Customer\PreOrderController::class, 'billingPreOrder']);
         Route::post('payment_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'bayarSekarang']);
         Route::post('payment_proses_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'paymentProsess']);
-        
     }
 );
 
