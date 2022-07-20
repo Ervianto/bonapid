@@ -74,6 +74,8 @@
                                         Terverfikasi & Terbayar
                                     @elseif($preOrder->status == 3)
                                         Dibatalkan
+                                    @elseif($preOrder->status == 4)
+                                        Ditolak
                                     @endif
                                 </td>
                             </tr>

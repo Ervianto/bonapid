@@ -22,10 +22,10 @@ Route::get('/home', [App\Http\Controllers\Customer\DashboardController::class, '
 Route::get('/signin', [App\Http\Controllers\Customer\AccountController::class, 'signin'])->name('customer.signin');
 Route::post('/signup', [App\Http\Controllers\Customer\AccountController::class, 'signup'])->name('customer.signup');
 Route::get('/produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'detailProduk']);
-Auth::routes();
+Route::get('/list_produk/{id}', [App\Http\Controllers\Customer\DashboardController::class, 'produkKategori']);
+Auth::routes(['verify' => true]);
 
-Route::middleware(['auth'])->group(
-    function () {
+Route::group(['middleware' => ['auth', "verified"]], function () {
 
         Route::resource('customer-cart', App\Http\Controllers\Customer\CartController::class);
         Route::get('/checkout', [App\Http\Controllers\Customer\CheckoutController::class, 'index']);
@@ -68,16 +68,21 @@ Route::middleware(['auth'])->group(
             Route::get('/pengiriman/{id}/edit', [App\Http\Controllers\Admin\PengirimanController::class, 'edit']);
             Route::post('/pengiriman/kirim', [App\Http\Controllers\Admin\PengirimanController::class, 'kirim'])->name('admin.pengiriman-kirim');
 
+            // retur
+            Route::get('/retur', [App\Http\Controllers\Admin\ReturController::class, 'index'])->name('admin.retur');
+            
             // menu informasi
             // alamat toko
             Route::get('/alamat-toko', [App\Http\Controllers\Admin\AlamatTokoController::class, 'index'])->name('admin.alamat-toko');
-            Route::get('/alamat-toko/{id}/edit', [App\Http\Controllers\Admin\AlamatTokoController::class, 'edit']);
+            Route::get('/alamat-toko/edit', [App\Http\Controllers\Admin\AlamatTokoController::class, 'edit']);
             Route::post('/alamat-toko/update', [App\Http\Controllers\Admin\AlamatTokoController::class, 'update'])->name('admin.alamat-toko-update');
 
             // review
             Route::get('/review', [App\Http\Controllers\Admin\ReviewController::class, 'index'])->name('admin.review');
+            Route::post('/event/balas', [App\Http\Controllers\Admin\ReviewController::class, 'balas'])->name('admin.review-balas');
             Route::get('/review/{id}/edit', [App\Http\Controllers\Admin\ReviewController::class, 'edit']);
             Route::post('/review/hapus', [App\Http\Controllers\Admin\ReviewController::class, 'destroy'])->name('admin.review-hapus');
+            Route::post('/review/balasan', [App\Http\Controllers\Admin\ReviewController::class, 'detail']);
 
             // event
             Route::get('/event', [App\Http\Controllers\Admin\EventController::class, 'index'])->name('admin.event');
@@ -102,6 +107,7 @@ Route::middleware(['auth'])->group(
 
             // stok
             Route::get('/stok', [App\Http\Controllers\Admin\BarangController::class, 'indexStok'])->name('admin.stok');
+            Route::get('/log-stok', [App\Http\Controllers\Admin\BarangController::class, 'indexLogStok'])->name('admin.log-stok');
 
             // menu master
             // kategori
@@ -116,7 +122,15 @@ Route::middleware(['auth'])->group(
             Route::get('/user/{id}/edit', [App\Http\Controllers\Admin\UserController::class, 'edit']);
             Route::post('/user/hapus', [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.user-hapus');
             Route::patch('/user/update', [App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.user-update');
+            Route::get('/profile', [App\Http\Controllers\Admin\UserController::class, 'indexProfile'])->name('admin.profile');
+            Route::get('/profile/edit', [App\Http\Controllers\Admin\UserController::class, 'editProfile']);
+            Route::post('/profile/update', [App\Http\Controllers\Admin\UserController::class, 'updateProfile'])->name('admin.profile-update');
 
+            // sosmed
+            Route::get('/sosmed', [App\Http\Controllers\Admin\SosmedController::class, 'index'])->name('admin.sosmed');
+            Route::get('/sosmed/edit', [App\Http\Controllers\Admin\SosmedController::class, 'edit']);
+            Route::post('/sosmed/update', [App\Http\Controllers\Admin\SosmedController::class, 'update'])->name('admin.sosmed-update');
+            
             // about
             Route::get('/about', function () {
                 return view('about');
@@ -137,8 +151,7 @@ Route::middleware(['auth'])->group(
         Route::post('billing-address-pre-order', [App\Http\Controllers\Customer\PreOrderController::class, 'billingPreOrder']);
         Route::post('payment_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'bayarSekarang']);
         Route::post('payment_proses_pre_order', [App\Http\Controllers\Customer\PreOrderController::class, 'paymentProsess']);
-    }
-);
+});
 
 Route::get('/get_kota', [App\Http\Controllers\Customer\AccountController::class, 'getCities']);
 Route::get('/about', function () {

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Carbon\Carbon;
 use App\Models\Produk;
+use App\Models\Kategori;
 use App\Models\Review;
 use App\Models\Event;
 
@@ -20,12 +21,14 @@ class DashboardController extends Controller
         $events = Event::where('is_active', 1)
             ->get();
         if($request->search != ''){
-            $produk = Produk::with('category')->where('status', '1')
-                ->where('nama_produk', 'like', '%'.$request->search.'%')
+            $produk = Produk::join('kategori as kt', 'kt.id', '=', 'produk.kategori_id')->select('produk.*', 'kt.nama_kategori')
+                ->where('produk.nama_produk', 'like', '%'.$request->search.'%')
                 ->paginate(10);
         }else{
-            $produk = Produk::with('category')->where('status', '1')->paginate(10);
+            $produk = Produk::join('kategori as kt', 'kt.id', '=', 'produk.kategori_id')->where('produk.status', '1')
+                ->select('produk.*', 'kt.nama_kategori')->paginate(10);
         }
+        //echo json_encode(["data" => $produk]);
         return view('customer.dashboard.home', compact('produk', 'events'));
     }
 
@@ -86,5 +89,15 @@ class DashboardController extends Controller
         $review->delete();
         Alert::success('Sukses', 'Berhasil menghapus review');
         return redirect()->back();
+    }
+    
+    public function produkKategori($kategoriId)
+    {
+        $kt = Kategori::find($kategoriId);
+        $produk = Produk::join('kategori as kt', 'kt.id', '=', 'produk.kategori_id')->where('produk.status', '1')
+                ->where('produk.kategori_id', $kategoriId)
+                ->select('produk.*', 'kt.nama_kategori')
+                ->get();
+        return view('customer.produk', compact('produk', 'kt'));
     }
 }

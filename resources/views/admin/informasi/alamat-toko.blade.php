@@ -24,7 +24,6 @@
                     @endif
                     <form action="{{route('admin.alamat-toko-update')}}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="id" id="id">
-                        <input type="hidden" name="action" id="action" value="">
                         @csrf
                         <div class="modal-body">
                             <div class="row">
@@ -45,8 +44,9 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Kota :</label>
+                                        <input type="text" id="city_lama" name="city_lama" class="form-control mb-2" readonly>
                                         <p>
-                                            <select style="width: 100%; padding: 10px;" class="provinsi form-control" name="city_id" id="city_id" required>
+                                            <select style="width: 100%; padding: 10px;" class="provinsi form-control" name="city_id" id="city_id">
                                             </select>
                                         </p>
                                     </div>
@@ -81,17 +81,19 @@
 @endsection
 @push('scripts')
 <script>
-    $(document).ready(function() {
-
-        $('.provinsi').select2();
-
-        $.get('alamat-toko/' + data_id + '/edit', function(data) {
+    $(function() {
+        $.get('alamat-toko/edit', function(data) {
             $('#id').val(data.id);
-            $('#province_id').val(data.province_id).trigger('change');;
-            $('#city_id').val(data.city_id).trigger('change');;
+            $('#province_id').val(data.province_id).trigger('change');
+            $('#city_lama').val(data.name).trigger('change');
             $('#kode_pos').val(data.kode_pos);
             $('#alamat').val(data.alamat);
         })
+    });
+
+    $(document).ready(function() {
+
+        $('.provinsi').select2();
     });
 
     function pilihProvinsi() {

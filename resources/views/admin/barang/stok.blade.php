@@ -122,6 +122,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class=" form-control-label">Tanggal :</label>
+                                <input type="date" id="tgl" name="tgl" placeholder="Masukkan Tanggal" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label class=" form-control-label">Jumlah Stok :</label>
                                 <input type="number" id="stok_produk" name="stok_produk" placeholder="Masukkan Jumlah Stok" class="form-control" required>
                             </div>
@@ -199,13 +207,12 @@
         $('body').on('click', '#btnEdit', function() {
             var data_id = $(this).data('id');
             $.get('barang/' + data_id + '/edit', function(data) {
-                $('#updateLabel').html("Edit Barang");
+                $('#updateLabel').html("Update Stok");
                 $('#btn-save').prop('disabled', false);
                 $('#update').modal('show');
                 $('input[name=action]').val('update-stok');
                 $('#id').val(data.id);
                 $('#stok_produk').val(data.stok_produk);
-                $('#nama_produk').val(data.nama_produk);
             })
         });
     });

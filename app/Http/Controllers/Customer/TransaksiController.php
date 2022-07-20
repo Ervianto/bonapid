@@ -55,7 +55,20 @@ class TransaksiController extends Controller
                 'md.payment_type', 'md.status', 'md.va_number')
             ->orderBy('transaksi.created_at', 'DESC')
             ->get();
-        return view('customer.histori', compact('transaksiSelesai', 'transaksiBlmSelesaipembayaran', 'transaksiPengiriman'));
+        $transaksiRetur = Transaksi::join('pengiriman', 'pengiriman.kode_transaksi', '=', 'transaksi.kode')
+            ->join('payment_midtrains as md', 'md.order_id', '=', 'transaksi.kode')
+            ->where('transaksi.status_transaksi', 0)
+            ->where('pengiriman.status_dikirim', 1)
+            ->where('pengiriman.status_sampai', 2)
+            ->where('md.status', 'settlement')
+            ->where('transaksi.user_id', Auth::user()->id)
+            ->select('transaksi.*', 'pengiriman.kurir', 'pengiriman.lama_sampai', 
+                'pengiriman.status_sampai', 'pengiriman.status_dikirim', 'pengiriman.video_response', 'pengiriman.keterangan',
+                \DB::raw('CONCAT("BONA","-", transaksi.id, "-", transaksi.user_id) as kode_tr'),
+                'md.payment_type', 'md.status', 'md.va_number')
+            ->orderBy('transaksi.created_at', 'DESC')
+            ->get();
+        return view('customer.histori', compact('transaksiSelesai', 'transaksiBlmSelesaipembayaran', 'transaksiPengiriman', 'transaksiRetur'));
     }
 
     public function show($id)
@@ -85,8 +98,10 @@ class TransaksiController extends Controller
             ->where('transaksi.kode', $id)
             ->select('transaksi.*', 'pengiriman.kurir', 'pengiriman.lama_sampai', 
                 'pengiriman.status_sampai', 'pengiriman.status_dikirim', 'pengiriman.id as id_pengiriman',
+                'pengiriman.keterangan', 'pengiriman.video_response',
                 \DB::raw('CONCAT("BONA","-", transaksi.id, "-", transaksi.user_id) as kode_tr'),
                 'md.payment_type', 'md.status', 'md.va_number')
+            ->orderBy('pengiriman.created_at', 'DESC')
             ->first();
         $detailTransaksi = DetailTransaksi::join('produk', 'produk.id', '=', 'detail_transaksi.produk_id')
             ->where('detail_transaksi.kode_transaksi', $id)
@@ -98,15 +113,34 @@ class TransaksiController extends Controller
     public function konfirmasiBarangSampai(Request $request, $id)
     {
         $pengiriman = Pengiriman::where('kode_transaksi', $id)->first();
-        $pengiriman->status_sampai = 1;
+        $pengiriman->status_sampai = $request->status_sampai;
         if(isset($request->keterangan)){
             $pengiriman->keterangan = $request->keterangan;
         }
+        if($request->hasFile('video_response')){
+            $videoName = time() . $request->file('video_response')->getClientOriginalName();
+            $request->video_response->move(public_path('video/retur'), $videoName);
+            $pengiriman->video_response = $videoName;
+        }
+        $status_transaksi = 0;
+        if($request->status_sampai == 1){
+            $status_transaksi = 1;
+            $message = "Terimakasih sudah berbelanja pada toko kami";
+        }else if($request->status_sampai == 2){
+            $message = "Retur akan kami proses, Segera untuk mengirim barang ke Toko BONAFIDE";
+            $pengirimanNew = new Pengiriman();
+            $pengirimanNew->kode_transaksi = $id;
+            $pengirimanNew->status_dikirim = 0;
+            $pengirimanNew->status_sampai = 0;
+            $pengirimanNew->kurir = $pengiriman->kurir;
+            $pengirimanNew->lama_sampai = $pengiriman->lama_sampai;
+            $pengirimanNew->save();
+        }
         $pengiriman->save();
         Transaksi::where('kode', $id)->update([
-            'status_transaksi' => 1
+            'status_transaksi' => $status_transaksi
         ]);
-        Alert::success('Sukses', 'Terimakasih sudah berbelanja pada toko kami');
+        Alert::success('Sukses', $message);
         return redirect()->back();
     }
 

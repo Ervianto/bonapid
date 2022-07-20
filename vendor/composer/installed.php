@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '50efe153b09d0f3bc192bce2b3bc0e019d6f590d',
+        'reference' => '90fd662e59506c611bd3ed080317e1078f1ee41d',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -17,6 +17,15 @@
             'install_path' => __DIR__ . '/../asm89/stack-cors',
             'aliases' => array(),
             'reference' => '73e5b88775c64ccc0b84fb60836b30dc9d92ac4a',
+            'dev_requirement' => false,
+        ),
+        'biscolab/laravel-recaptcha' => array(
+            'pretty_version' => 'v5.4.0',
+            'version' => '5.4.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../biscolab/laravel-recaptcha',
+            'aliases' => array(),
+            'reference' => '1bab726402d5376553a439b88a0faa07e84488fd',
             'dev_requirement' => false,
         ),
         'brick/math' => array(
@@ -418,7 +427,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '50efe153b09d0f3bc192bce2b3bc0e019d6f590d',
+            'reference' => '90fd662e59506c611bd3ed080317e1078f1ee41d',
             'dev_requirement' => false,
         ),
         'laravel/sail' => array(
@@ -802,8 +811,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0',
             ),
         ),
         'psr/simple-cache' => array(

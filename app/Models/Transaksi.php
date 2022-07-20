@@ -17,6 +17,7 @@ class Transaksi extends Model
         "total_transaksi",
         "pesanan_id",
         "status_transaksi",
+        "tipe",
         "jasa_ongkir",
     ];
 

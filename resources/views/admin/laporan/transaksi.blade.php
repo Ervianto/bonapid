@@ -47,6 +47,7 @@
                                 <th>Kurir</th>
                                 <th>Lama Sampai</th>
                                 <th>Jasa Ongkir</th>
+                                <th>Tipe</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
@@ -124,6 +125,10 @@
                     data: 'total_transaksi',
                     name: 'total_transaksi',
                     render: $.fn.dataTable.render.number(',', '.', 2, '')
+                },
+                {
+                    data: 'tipe',
+                    name: 'tipe'
                 },
             ]
         });

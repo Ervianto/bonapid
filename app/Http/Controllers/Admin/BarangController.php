@@ -96,6 +96,29 @@ class BarangController extends Controller
 
         return view('admin.barang.stok');
     }
+
+    public function indexLogStok()
+    {
+        if (request()->ajax()) {
+            $produk = DB::table('produk')
+                ->select('produk.*', 'kategori.nama_kategori','log_stok.tgl','log_stok.jumlah')
+                ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+                ->join('log_stok', 'log_stok.barang_id', '=', 'produk.id')
+                ->orderByDesc('log_stok.tgl')
+                ->get();
+
+            return DataTables::of($produk)
+                ->addColumn('stok', function ($row) {
+                    $st = '<span class="badge badge-pill badge-danger"> ' . $row->jumlah . '</span>';
+                    return $st;
+                })
+                ->rawColumns(['stok'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+
+        return view('admin.barang.log-stok');
+    }
     public function store(Request $request)
     {
         if ($request->action == 'tambah') {
@@ -134,6 +157,12 @@ class BarangController extends Controller
         } else {
             DB::table('produk')->where('id', $request->id)->update([
                 'stok_produk'     => $request->stok_produk
+            ]);
+            
+            DB::table('log_stok')->insert([
+                'barang_id'     => $request->id,
+                'tgl'     => $request->tgl,
+                'jumlah'     => $request->stok_produk,
             ]);
 
             Alert::success('Sukses', 'Stok Barang Berhasil Diedit');

@@ -124,31 +124,52 @@
                         </table><br />
                         @if ($transaksi->status_sampai == 0)
                             <h4>Konfirmasi Barang Sampai</h4>
-                            <form method="POST" action="{{ url('store_brg_sampai/' . $transaksi->kode) }}">
+                            <form method="POST" enctype="multipart/form-data" action="{{ url('store_brg_sampai/' . $transaksi->kode) }}">
                                 @csrf
                                 <div class="form-group">
                                     <label>Status Barang :</label><br />
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                                            id="inlineRadio1" @if($transaksi->status_sampai == 0) checked @endif value="0">
-                                        <label class="form-check-label" for="inlineRadio1">Belum Sampai</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
+                                        <input class="form-check-input" type="radio" name="status_sampai"
                                             id="inlineRadio2" value="1">
                                         <label class="form-check-label" for="inlineRadio2">Sampai</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_sampai"
+                                            id="inlineRadio3" value="2">
+                                        <label class="form-check-label" for="inlineRadio2">Retur Barang</label>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>Keterangan</label>
                                     <textarea class="form-control" name="keterangan" placeholder="Keterangan apabila diperlukan"></textarea>
                                 </div>
+                                <div class="form-group">
+                                    <label>Video</label>
+                                    <div class="custom-file">
+                                        <input type="file" name="video_response" accept="video/mp4,video/x-m4v,video/*" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">Pilih Video</label>
+                                    </div>
+                                </div>
                                 <button class="btn btn-primary" type="submit">Simpan</button>
                             </form>
-                        @else
+                        @elseif($transaksi->status_sampai == 1)
                             <div class="alert alert-success" role="alert">
                               Barang telah sampai
                             </div>
+                        @elseif($transaksi->status_sampai == 2)
+                            <div class="alert alert-warning" role="alert">
+                              Retur Barang
+                            </div>
+                              <table class="table">
+                                  <tr>
+                                      <td>Keterangan</td>
+                                      <td>{{ $transaksi->keterangan }}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Video</td>
+                                      <td><video width="100" src="{{ asset('video/retur/'.$transaksi->video_response) }}" controls></video></td>
+                                  </tr>
+                              </table>
                         @endif
                     </div>
                 </div>

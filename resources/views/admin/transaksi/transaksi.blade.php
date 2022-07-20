@@ -52,6 +52,7 @@
                                 <th>Total</th>
                                 <th>Pembayaran</th>
                                 <th>Status</th>
+                                <th>Tipe</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -229,6 +230,10 @@
                     data: 'status_trx',
                     name: 'status_trx',
                     searchable: false
+                },
+                {
+                    data: 'tipe',
+                    name: 'tipe'
                 },
                 {
                     data: 'aksi',

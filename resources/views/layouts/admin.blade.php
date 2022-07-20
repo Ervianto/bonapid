@@ -89,7 +89,7 @@
                                 <p class="mb-1 mt-3 font-weight-semibold">{{Auth::user()->name}}</p>
                                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
                             </div>
-                            <!-- <a class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profile </a> -->
+                            <a class="dropdown-item" href="{{route('admin.profile')}}"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profile </a>
                             <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Sign Out</a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -157,28 +157,30 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk') ? 'true' : 'false' }}" aria-controls="form-gudang">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#form-gudang" aria-expanded="{{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk')||Route::is('admin.log-stok') ? 'true' : 'false' }}" aria-controls="form-gudang">
                             <i class="menu-icon mdi mdi-card-text-outline"></i>
                             <span class="menu-title">Gudang</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk') ? 'show' : '' }} " id="form-gudang">
+                        <div class="collapse {{ Route::is('admin.barang')||Route::is('admin.stok')||Route::is('admin.foto-produk')||Route::is('admin.log-stok') ? 'show' : '' }} " id="form-gudang">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.barang') ? 'active' : '' }} " href="{{route('admin.barang')}}">Barang</a></li>
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.foto-produk') ? 'active' : '' }} " href="{{route('admin.foto-produk')}}">Foto Produk</a></li>
                                 <li class="nav-item"><a class="nav-link {{ Route::is('admin.stok') ? 'active' : '' }}" href="{{route('admin.stok')}}">Stok</a></li>
+                                <li class="nav-item"><a class="nav-link {{ Route::is('admin.log-stok') ? 'active' : '' }}" href="{{route('admin.log-stok')}}">Log Stok</a></li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-master" aria-expanded="{{ Route::is('admin.kategori')|| Route::is('admin.user') ? 'true' : 'false' }}" aria-controls="ui-master">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#ui-master" aria-expanded="{{ Route::is('admin.kategori')|| Route::is('admin.user')||Route::is('admin.sosmed') ? 'true' : 'false' }}" aria-controls="ui-master">
                             <i class="menu-icon mdi mdi-floor-plan"></i>
                             <span class="menu-title">Master</span>
                             <i class="menu-arrow"></i>
                         </a>
-                        <div class="collapse {{ Route::is('admin.kategori')||Route::is('admin.user') ? 'show' : '' }} " id="ui-master">
+                        <div class="collapse {{ Route::is('admin.kategori')||Route::is('admin.user')||Route::is('admin.sosmed') ? 'show' : '' }} " id="ui-master">
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item"> <a class="nav-link {{ Route::is('admin.kategori') ? 'active' : '' }}" href="{{route('admin.kategori')}}">Kategori</a></li>
+                                <li class="nav-item"> <a class="nav-link {{ Route::is('admin.sosmed') ? 'active' : '' }}" href="{{route('admin.sosmed')}}">Sosmed</a></li>
                                 <li class="nav-item"> <a class="nav-link {{ Route::is('admin.user') ? 'active' : '' }}" href="{{route('admin.user')}}">Users</a></li>
                             </ul>
                         </div>

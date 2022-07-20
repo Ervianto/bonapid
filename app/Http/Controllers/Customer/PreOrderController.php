@@ -65,6 +65,11 @@ class PreOrderController extends Controller
        $detPreOrder->variasi = $request->variasi;
        $detPreOrder->harga = $produk->harga_produk;
        $detPreOrder->ukuran = $request->ukuran;
+       
+        $imageName = time() . $request->file('foto')->getClientOriginalName();
+        $request->foto->move(public_path('foto/pre_order'), $imageName);
+        $detPreOrder->foto = $imageName;
+       
        $detPreOrder->keterangan = $request->keterangan;
        $detPreOrder->save();
        Alert::success('Sukses', 'Berhasil menambahkan produk pre order');
@@ -78,6 +83,11 @@ class PreOrderController extends Controller
         $detPreOrder->variasi = $request->variasi;
         $detPreOrder->ukuran = $request->ukuran;
         $detPreOrder->keterangan = $request->keterangan;
+        if($request->hasFile('foto')){
+            $imageName = time() . $request->file('foto')->getClientOriginalName();
+            $request->foto->move(public_path('foto/pre_order'), $imageName);
+            $detPreOrder->foto = $imageName;
+        }
         $detPreOrder->save();
         Alert::success('Sukses', 'Berhasil mengubah produk pre order');
         return redirect()->back();
@@ -218,6 +228,7 @@ class PreOrderController extends Controller
                 "user_id" => \Auth::user()->id,
                 "total_transaksi" => $json->gross_amount,
                 "status_transaksi" => 0,
+                "tipe" => "pre_order",
                 "jasa_ongkir" => ($json->gross_amount - $preOrder->total),
             ]);
     
@@ -233,7 +244,7 @@ class PreOrderController extends Controller
                     "harga_produk" => $row->harga
                 ]);
 
-                $produk = Produk::find($row->id);
+                $produk = Produk::find($row->produk_id);
                 $produk->stok_produk = ($produk->stok_produk - $row->qty);
                 $produk->save();
             }

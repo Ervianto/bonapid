@@ -40,22 +40,30 @@ class AlamatTokoController extends Controller
 
     public function update(Request $request)
     {
-        DB::table('alamat_toko')->where('id', $request->id)->update([
-            'province_id'     => $request->province_id,
-            'city_id'     => $request->city_id,
-            'kode_pos'     => $request->kode_pos,
-            'alamat'     => $request->alamat,
-            'updated_at'    => \Carbon\Carbon::now()
-        ]);
+        if ($request->city_id == "") {
+            DB::table('alamat_toko')->where('id', $request->id)->update([
+                'province_id'     => $request->province_id,
+                'kode_pos'     => $request->kode_pos,
+                'alamat'     => $request->alamat,
+                'updated_at'    => \Carbon\Carbon::now()
+            ]);
+        } else {
+            DB::table('alamat_toko')->where('id', $request->id)->update([
+                'province_id'     => $request->province_id,
+                'city_id'     => $request->city_id,
+                'kode_pos'     => $request->kode_pos,
+                'alamat'     => $request->alamat,
+                'updated_at'    => \Carbon\Carbon::now()
+            ]);
+        }
 
         Alert::success('Sukses', 'Alamat Toko Berhasil Diupdate');
         return redirect("/admin/alamat-toko");
     }
 
-    public function edit($id)
+    public function edit()
     {
-        $alamat_toko = DB::table('alamat_toko')
-            ->where('id', $id)->first();
+        $alamat_toko = DB::table('alamat_toko')->select('alamat_toko.*', 'cities.name')->join('cities', 'cities.city_id', '=', 'alamat_toko.city_id')->first();
 
         return Response::json($alamat_toko);
     }

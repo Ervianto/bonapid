@@ -46,6 +46,7 @@
                                 <th>Lama</th>
                                 <th>Status Kirim</th>
                                 <th>Status Sampai</th>
+                                <th>Tipe</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -226,6 +227,10 @@
                     data: 'ss',
                     name: 'ss',
                     searchable: false
+                },
+                {
+                    data: 'tipe',
+                    name: 'tipe'
                 },
                 {
                     data: 'aksi',

@@ -149,6 +149,7 @@
             <form action="{{route('admin.preorder-update')}}" method="POST">
                 @csrf
                 <input type="hidden" name="id1" id="id1">
+                <input type="hidden" name="action" id="action">
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Ya</button>
                 </div>
@@ -285,14 +286,26 @@
             $('#table-detail').html(htmlView);
         }
 
-        // modal update
-        $('body').on('click', '#btnUpdate', function() {
+        // modal verif
+        $('body').on('click', '#btnVerif', function() {
             var data_id = $(this).data('id');
             $.get('preorder/' + data_id + '/edit', function(data) {
-                $('#updateLabel').html("Update Status Pre Order");
+                $('#updateLabel').html("Verifikasi Pre Order");
                 $('#btn-save').prop('disabled', false);
                 $('#update').modal('show');
                 $('#id1').val(data.id);
+                $('input[name=action]').val('verif');
+            })
+        });
+        // modal tolak
+        $('body').on('click', '#btnTolak', function() {
+            var data_id = $(this).data('id');
+            $.get('preorder/' + data_id + '/edit', function(data) {
+                $('#updateLabel').html("Tolak Pre Order");
+                $('#btn-save').prop('disabled', false);
+                $('#update').modal('show');
+                $('#id1').val(data.id);
+                $('input[name=action]').val('tolak');
             })
         });
 

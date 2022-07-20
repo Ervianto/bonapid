@@ -73,6 +73,11 @@ class UserController extends Controller
         ]);
     }
 
+    public function indexProfile()
+    {
+        return view('admin.profile.edit');
+    }
+
     public function store(Request $request)
     {
 
@@ -151,5 +156,33 @@ class UserController extends Controller
         }
 
         return redirect("/admin/user");
+    }
+
+    public function updateProfile(Request $request)
+    {
+        if ($request->password == "") {
+            DB::table('users')->where('id', $request->id)->update([
+                'name'     => $request->name,
+                'username'     => $request->username,
+                'email'     => $request->email,
+            ]);
+        } else {
+            DB::table('users')->where('id', $request->id)->update([
+                'name'     => $request->name,
+                'username'     => $request->username,
+                'email'     => $request->email,
+                'password'     => Hash::make($request->password),
+            ]);
+        }
+
+        Alert::success('Sukses', 'Profile Berhasil Diupdate');
+        return redirect()->back();
+    }
+
+    public function editProfile()
+    {
+        $users = DB::table('users')->where('id', Auth::user()->id)->first();
+
+        return Response::json($users);
     }
 }

@@ -42,6 +42,60 @@
     </div>
 </div>
 
+<!-- modal balas -->
+<div class="modal fade bd-example-modal-lg" id="balas" tabindex="-1" role="dialog" aria-labelledby="balasLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="balasLabel"></h5>
+            </div>
+            <form action="{{route('admin.review-balas')}}" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="review_id" id="review_id">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label for="kb" class=" form-control-label">Daftar Balasan</label>
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table table-dark">
+                                        <tr>
+                                            <td>No.</td>
+                                            <td>Isi</td>
+                                            <td>Foto</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="table-detail">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class=" form-control-label">Pilih Gambar :</label>
+                                <input type="file" id="foto" name="foto" placeholder="Masukkan Foto" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class=" form-control-label">Isi Balasan :</label>
+                                <textarea id="isi" name="isi" placeholder="Masukkan Isi Balasan" class="form-control" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end modal tambah & edit -->
 <!-- modal hapus -->
 <div class="modal fade bd-example-modal-lg" id="hapus" tabindex="-1" role="dialog" aria-labelledby="hapusLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -115,7 +169,45 @@
     });
 
     $(document).ready(function() {
-
+        
+        // modal edit
+        $('body').on('click', '#btnBalas', function() {
+            var data_id = $(this).data('id');
+            $.get('review/' + data_id + '/edit', function(data) {
+                $('#balasLabel').html("Balas Review");
+                $('#btn-save').prop('disabled', false);
+                $('#balas').modal('show');
+                $('#review_id').val(data.id);
+                
+                $.post('review/balasan', {
+                    review_id: data.id,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                }, function(data1) {
+                    table_post_row(data1);
+                });
+            })
+        });
+        
+     // table row with ajax
+            function table_post_row(res) {
+                let htmlView = '';
+                if (res.review.length <= 0) {
+                    htmlView += `
+           <tr>
+              <td colspan="4">No data.</td>
+          </tr>`;
+                }
+                for (let i = 0; i < res.review.length; i++) {
+                    htmlView += `
+            <tr>
+               <td>` + (i + 1) + `</td>
+                  <td>` + res.review[i].isi + `</td>
+                   <td><a href="https://tokobonafide.store/public/foto/balas_review/` + res.review[i].foto + `" target="_blank"><img src="https://tokobonafide.store/public/foto/balas_review/` + res.review[i].foto + `" width="300px"></img></a></td>
+            </tr>`;
+                }
+                $('#table-detail').html(htmlView);
+            }
+            
         // modal hapus
         $('body').on('click', '#btnHapus', function() {
             var data_id = $(this).data('id');

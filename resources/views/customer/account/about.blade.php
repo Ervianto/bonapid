@@ -16,7 +16,7 @@
 use App\Models\AlamatToko;
 
 $alamat = AlamatToko::join('provinces as prov', 'prov.id', '=', 'alamat_toko.province_id')
-    ->join('cities as city', 'city.id', '=', 'alamat_toko.city_id')
+    ->join('cities as city', 'city.city_id', '=', 'alamat_toko.city_id')
     ->select('alamat_toko.kode_pos', 'alamat_toko.alamat', 'prov.name as nama_provinsi', 'city.name as kota')
     ->first();
 ?>

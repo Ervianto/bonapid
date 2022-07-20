@@ -61,9 +61,10 @@ class CheckoutController extends Controller
             ]);
         }
 
-        $jasaOngkir = $request->jasa_ongkir;
+        $itemOngkir = explode(",", $request->jasa_ongkir);
+        $jasaOngkir = $itemOngkir[0];
         $kurir = $request->kurir;
-        $lamaSampai = $request->lama_sampai;
+        $lamaSampai = $itemOngkir[1].' hari';
 
         array_push($itemDetails, [
             'id' => 'ongkir123',
@@ -119,6 +120,7 @@ class CheckoutController extends Controller
                 "user_id" => Auth::user()->id,
                 "total_transaksi" => $json->gross_amount,
                 "status_transaksi" => 0,
+                "tipe" => "pembelian",
                 "jasa_ongkir" => ($json->gross_amount - \Cart::getTotal()),
             ]);
     

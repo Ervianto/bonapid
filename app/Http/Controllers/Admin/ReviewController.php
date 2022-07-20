@@ -43,12 +43,14 @@ class ReviewController extends Controller
 
             return DataTables::of($review)
                 ->addColumn('aksi', function ($row) {
-                    $data = '<a href="javascript:void(0)" class="btn btn-danger btn-icon-text" id="btnHapus" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-trash-can-outline"></i></a>
+                    $data = '<a href="javascript:void(0)" class="btn btn-warning btn-icon-text" id="btnBalas" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-comment"></i></a>
+                                    <meta name="csrf-token" content="{{ csrf_token() }}"><br>
+                                    <a href="javascript:void(0)" class="btn btn-danger btn-icon-text mt-1" id="btnHapus" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-trash-can-outline"></i></a>
                                     <meta name="csrf-token" content="{{ csrf_token() }}">';
                     return $data;
                 })
                 ->addColumn('foto_review', function ($row) {
-                    $data = '<a href="http://localhost/ecommerce/public/foto/review/' . $row->foto . '" target="_blank"><img src="http://localhost/ecommerce/public/foto/review/' . $row->foto . '" width="300px"></img></a>';
+                    $data = '<a href="https://tokobonafide.store/public/foto/review/' . $row->foto . '" target="_blank"><img src="https://tokobonafide.store/public/foto/review/' . $row->foto . '" width="300px"></img></a>';
                     return $data;
                 })
                 ->rawColumns(['aksi', 'foto_review'])
@@ -58,6 +60,36 @@ class ReviewController extends Controller
 
         return view('admin.informasi.review');
     }
+    
+    public function balas(Request $request)
+    {
+        $file = $request->file('foto');
+        if ($file == "") {
+            $nama_file = "";
+        } else {
+            $file->move(public_path('foto/balas_review'), $file->getClientOriginalName());
+            $nama_file = $file->getClientOriginalName();
+        }
+
+            DB::table('balas_review')->insert([
+                'review_id'     => $request->review_id,
+                'foto'     => $nama_file,
+                'isi'    => $request->isi
+            ]);
+
+            Alert::success('Sukses', 'Berhasil Balas Review');
+            return redirect("/admin/review");
+    }
+
+    public function detail(Request $request)
+    {
+        $review = DB::table('balas_review')->where('review_id', $request->review_id)->get();
+
+        return response()->json([
+            'review' => $review
+        ]);
+    }
+
 
     public function edit($id)
     {

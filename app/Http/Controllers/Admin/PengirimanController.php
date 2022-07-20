@@ -36,16 +36,18 @@ class PengirimanController extends Controller
         if (request()->ajax()) {
             if ($request->get('tgl_awal') || $request->get('tgl_akhir')) {
                 $transaksi = DB::table('pengiriman')
-                    ->select('pengiriman.*', 'users.name', 'transaksi.created_at as tgl_trx')
+                    ->select('pengiriman.*', 'users.name', 'transaksi.id as id_trx', 'transaksi.created_at as tgl_trx','transaksi.tipe')
                     ->join('transaksi', 'pengiriman.kode_transaksi', '=', 'transaksi.kode')
                     ->join('users', 'users.id', '=', 'transaksi.user_id')
+                    ->where('pengiriman.status_sampai','!=','2')
                     ->whereBetween('transaksi.created_at', [$request->get('tgl_awal'), $request->get('tgl_akhir')])
                     ->orderByDesc('transaksi.created_at')->get();
             } else {
                 $transaksi = DB::table('pengiriman')
-                    ->select('pengiriman.*', 'users.name', 'transaksi.id as id_trx', 'transaksi.created_at as tgl_trx')
+                    ->select('pengiriman.*', 'users.name', 'transaksi.id as id_trx', 'transaksi.created_at as tgl_trx','transaksi.tipe')
                     ->join('transaksi', 'pengiriman.kode_transaksi', '=', 'transaksi.kode')
                     ->join('users', 'users.id', '=', 'transaksi.user_id')
+                    ->where('pengiriman.status_sampai','!=','2')
                     ->orderByDesc('transaksi.created_at')->get();
             }
 
@@ -89,10 +91,22 @@ class PengirimanController extends Controller
 
     public function kirim(Request $request)
     {
+        $data = DB::table('pengiriman')->where('id',$request->id1)->first();
+        $cek = DB::table('pengiriman')->where('kode_transaksi',$data->kode_transaksi)->count();
+        if($cek>1){
+            $transaksi = DB::table('detail_transaksi')->where('kode_transaksi',$data->kode_transaksi)->get();
+            foreach($transaksi as $dt){
+                $produk = DB::table('produk')->where('id', $dt->produk_id)->first();
+                DB::table('produk')->where('id', $dt->produk_id)->update([
+                    'stok_produk'     => $produk->stok_produk - $dt->qty
+                ]);
+            }
+        }
+
         DB::table('pengiriman')->where('id', $request->id1)->update([
             'status_dikirim'     => '1'
         ]);
-
+        
         Alert::success('Sukses', 'Barang Berhasil Dikirim');
 
         return redirect("/admin/pengiriman");

@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <div class="card card-body">
                         <h3>Isikan data pesanan dibawah ini!</h3>
-                        <form method="POST" action="{{ route('pre-order.store') }}">
+                        <form method="POST" action="{{ route('pre-order.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6">
@@ -57,8 +57,18 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>Keterangan Pesanan</label>
+                                        <label>Keterangan / Catatan Pesanan</label>
                                         <textarea style="width: 100%;" class="form-control" name="keterangan" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Foto Pesanan</label>
+                                        <div class="custom-file mb-2">
+                                            <input type="file" name="foto" class="custom-file-input" id="customFile"
+                                                accept="image/*" required>
+                                            <label class="custom-file-label" for="customFile">Ambil file</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +87,8 @@
                                         <td>Jumlah</td>
                                         <td>Variasi</td>
                                         <td>Ukuran</td>
-                                        <td>Keterangan</td>
+                                        <td>Ket / Catatan</td>
+                                        <td>Foto</td>
                                         <td>Aksi</td>
                                     </tr>
                                 </thead>
@@ -92,6 +103,7 @@
                                             <td>{{ $row->variasi }}</td>
                                             <td>{{ $row->ukuran }}</td>
                                             <td>{{ $row->keterangan }}</td>
+                                            <td><img src="{{ asset('foto/pre_order/'.$row->foto) }}" width="100" /></td>
                                             <td>
                                                 <button type="button" class="btn btn-warning" data-toggle="modal"
                                                     data-target="#modalEdit{{ $row->id }}">
@@ -147,7 +159,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <form method="POST"
-                                                            action="{{ route('pre-order.update', $row->id) }}">
+                                                            action="{{ route('pre-order.update', $row->id) }}" enctype="multipart/form-data">
                                                             @method('PUT')
                                                             @csrf
                                                             <div class="form-group">
@@ -172,8 +184,17 @@
                                                                     value="{{ $row->ukuran }}" required />
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>Keterangan</label>
+                                                                <label>Ket / Catatan</label>
                                                                 <textarea class="form-control" name="keterangan">{{ $row->keterangan }}</textarea>
+                                                            </div>
+                                                             <div class="form-group">
+                                                                <label>Foto</label>
+                                                                <div class="custom-file mb-2">
+                                                                    <input type="file" name="foto" class="custom-file-input" id="customFile"
+                                                                        accept="image/*" required>
+                                                                    <label class="custom-file-label" for="customFile">Ambil file</label>
+                                                                </div>
+                                                                <img src="{{ asset('foto/pre_order/'.$row->foto) }}" width="100" />
                                                             </div>
                                                             <button type="submit" class="btn btn-primary">Simpan</button>
                                                             <button type="button" class="btn btn-secondary"

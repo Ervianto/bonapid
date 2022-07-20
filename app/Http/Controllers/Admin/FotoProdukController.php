@@ -41,7 +41,7 @@ class FotoProdukController extends Controller
 
             return DataTables::of($produk)
                 ->addColumn('foto', function ($row) {
-                    $data = '<a href="http://localhost/ecommerce/public/foto/produk/' . $row->foto_produk . '" target="_blank"><img src="http://localhost/ecommerce/public/foto/produk/' . $row->foto_produk . '" width="300px"></img></a>';
+                    $data = '<a href="https://tokobonafide.store/public/foto/produk/' . $row->foto_produk . '" target="_blank"><img src="https://tokobonafide.store/public/foto/produk/' . $row->foto_produk . '" width="300px"></img></a>';
                     return $data;
                 })
                 ->addColumn('aksi', function ($row) {

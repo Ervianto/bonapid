@@ -148,12 +148,12 @@
                             console.log(row.cost[0]);
                             $("#listOngkir").append(
                                 '<div><input class="form-check-input" type="radio" onclick="pilihJasaKirim()" name="jasa_ongkir" id="inlineRadio' +
-                                row.service + '" value="' + row.cost[0].value +
+                                row.service + '" value="' + row.cost[0].value+","+row
+                                .cost[0].etd +
                                 '"> <label class="form-check-label" for="inlineRadio' +
-                                row.service + '">' + row.description + ' ' + row
+                                row.service + '">' + row.description + ',' + row
                                 .cost[0].etd + ' hari, Rp.' + row.cost[0].value +
                                 '</label></div>');
-                            $("#lama_sampai").val(row.cost[0].etd + ' hari');
                         })
                     });
                 }

@@ -50,10 +50,18 @@ class PreOrderController extends Controller
             return DataTables::of($pre_order)
                 ->addColumn('st', function ($row) {
                     if ($row->status == "0") {
-                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text" id="btnUpdate" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-send"></i> Verifikasi</a>
+                        $data = '<a href="javascript:void(0)" class="btn btn-success btn-icon-text" id="btnVerif" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-send"></i> Verifikasi</a>
+                                            <meta name="csrf-token" content="{{ csrf_token() }}"><br>
+                                <a href="javascript:void(0)" class="btn btn-danger btn-icon-text mt-1" id="btnTolak" data-toggle="modal" data-id="' . $row->id . '"><i class="mdi mdi-bookmark-remove"></i> Tolak</a>
                                             <meta name="csrf-token" content="{{ csrf_token() }}">';
-                    } else {
-                        $data = 'Terverifikasi';
+                    }else if ($row->status == "1") {   
+                        $data = 'Terverifikasi & Menunggu Pembayaran';
+                    }else if ($row->status == "2") {   
+                        $data = 'Terverifikasi & Terbayar';
+                    }else if ($row->status == "3") {   
+                        $data = 'Dibatalkan';
+                    }else if ($row->status == "4") {   
+                        $data = 'Ditolak';
                     }
                     return $data;
                 })
@@ -93,9 +101,15 @@ class PreOrderController extends Controller
 
     public function update(Request $request)
     {
-        DB::table('pre_order')->where('id', $request->id1)->update([
-            'status'     => '1'
-        ]);
+        if($request->action=="verif"){
+            DB::table('pre_order')->where('id', $request->id1)->update([
+                'status'     => '1'
+            ]);
+        }else{
+            DB::table('pre_order')->where('id', $request->id1)->update([
+                'status'     => '4'
+            ]);
+        }
 
         Alert::success('Sukses', 'Data Berhasil Diupdate');
 

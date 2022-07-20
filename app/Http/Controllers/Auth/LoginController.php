@@ -49,11 +49,13 @@ class LoginController extends Controller
         $rules = [
             'email'                   => 'required',
             'password'                => 'required',
+            'g-recaptcha-response' => 'recaptcha',
         ];
 
         $messages = [
             'email.required'             => 'email harus diisi',
-            'password.required'          => 'Password harus diisi'
+            'password.required'          => 'Password harus diisi',
+            'g-recaptcha-response.recaptcha'       => 'Google Recaptcha Gagal'
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);

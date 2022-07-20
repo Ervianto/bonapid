@@ -47,7 +47,7 @@ class EventController extends Controller
                     return $data;
                 })
                 ->addColumn('foto', function ($row) {
-                    $data = '<a href="http://localhost/ecommerce/public/foto/events/' . $row->foto_event . '" target="_blank"><img src="http://localhost/ecommerce/public/foto/events/' . $row->foto_event . '" width="300px"></img></a>';
+                    $data = '<a href="https://tokobonafide.store/public/foto/events/' . $row->foto_event . '" target="_blank"><img src="https://tokobonafide.store/public/foto/events/' . $row->foto_event . '" width="300px"></img></a>';
                     return $data;
                 })
                 ->addColumn('aksi', function ($row) {

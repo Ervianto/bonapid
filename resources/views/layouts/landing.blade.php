@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/DataTables/datatables.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('landing/font-awesome-4.7.0/css/font-awesome.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('landing/select2/css/select2.min.css') }}" />
-
+    {!! ReCaptcha::htmlScriptTagJsApi() !!}
     <style>
         .input-password {
             padding: 12px;
@@ -205,17 +205,24 @@
                                 <li><a href="{{ url('/') }}">Home</a>
                                 </li>
                                 <li><a href="{{ url('/about') }}">About</a></li>
+                                <li><a href="#">Produk</a>
+                                    <ul class="sub-menu">
+                                        <?php
+                                            use App\Models\Kategori;
+                                            
+                                            $kategori = Kategori::all();
+                                            foreach($kategori as $row){
+                                        ?>
+                                        <li><a href="{{ url('list_produk/'.$row->id) }}"><?= $row->nama_kategori ?></a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
                                 {{-- <li><a href="#">Contact</a></li> --}}
                                 @if (Auth::check())
                                     <li><a href="{{ url('customer-transaksi') }}">Transaksi</a></li>
                                     <li><a href="{{ url('pre-order') }}">Pre-Order</a></li>
-                                @endif
-                                <li>
-                                    <div class="header-icons">
-                                        @if (Auth::check())
-                                            <a href="#"><i class="fas fa-user"></i>
-                                                {{ Auth::user()->username }}</a>
-                                            <ul class="sub-menu">
+                                    <li><a href="#"><i class="fas fa-user"></i> {{ Auth::user()->username }}</a>
+                                        <ul class="sub-menu">
                                                 <li><a href="{{ route('customer.account') }}"> Profile</a></li>
                                                 <li><a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                     document.getElementById('logout-form').submit();"> Sign Out</a>
@@ -226,12 +233,16 @@
                                                     </form>
                                                 </li>
                                             </ul>
-                                        @else
+                                    </li>
+                                @endif
+                                <li>
+                                    <div class="header-icons">
+                                        @if (!Auth::check())
                                             <a href="{{ route('customer.signin') }}"><i class="fas fa-user"></i>
                                                 Masuk</a>
                                         @endif
-                                        <a class="shopping-cart" href="#"><i
-                                                class="fas fa-shopping-cart"></i></a>
+                                        <a class="shopping-cart" href="{{ url('customer-cart') }}"><i
+                                                class="fas fa-shopping-cart"></i> <span class="badge badge-danger" style="margin-top: -10px; margin-left: 20px; float: left;">{{ count(\Cart::getContent()) }}</span></a>
                                         <a class="mobile-hide search-bar-icon" href="#"><i
                                                 class="fas fa-search"></i></a>
                                     </div>
@@ -278,19 +289,23 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <p>Copyrights &copy; 2019 - <a href="https://imransdesign.com/">Imran Hossain</a>, All Rights
-                        Reserved.<br>
-                        Distributed By - <a href="https://themewagon.com/">Themewagon</a>
+                    <p>Copyrights &copy; 2022 - All Rights
                     </p>
                 </div>
                 <div class="col-lg-6 text-right col-md-12">
                     <div class="social-icons">
                         <ul>
-                            <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-linkedin"></i></a></li>
-                            <li><a href="#" target="_blank"><i class="fab fa-dribbble"></i></a></li>
+                            <?php
+                            
+                                $sosmed=DB::table('sosmed')->get();
+                                foreach($sosmed as $data){
+                            ?>
+                            <li><a href="{{$data->fb}}" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="{{$data->ig}}" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                            <li><a href="{{$data->wa}}" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
+                            <?php
+                                }
+                                ?>
                         </ul>
                     </div>
                 </div>

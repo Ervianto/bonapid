@@ -73,6 +73,9 @@
                                                         required>
                                                 </p>
                                             </div>
+                                            <div class="form-group row">
+                                                <div class="col-md-6"> {!! htmlFormSnippet() !!} </div>
+                                            </div>
                                             <p><input type="submit" value="Submit"></p>
                                         </form>
                                     </div>
@@ -81,7 +84,7 @@
                                     aria-labelledby="pills-signup-tab">
                                     <div class="contact-form">
                                         <h5 class="text-center">Silahkan Isi Data Diri Anda!</h5>
-                                        <form action="{{ route('customer.signup') }}" method="POST">
+                                        <form action="{{ route('register') }}" method="POST">
                                             @csrf
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Nama Lengkap :</label>

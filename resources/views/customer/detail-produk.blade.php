@@ -15,14 +15,15 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
+                @if(getFotoSingleProduk($produk->id) != null)
                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img src="{{ asset('foto/produk/' . $produk->foto_produk) }}" alt="">
+                            <img src="{{ asset('foto/produk/' . getFotoSingleProduk($produk->id)) }}" height="500" alt="">
                         </div>
                         @foreach ($produk->detailProduk as $row)
                             <div class="carousel-item">
-                                <img src="{{ asset('foto/produk/' . $row->foto_produk) }}" alt="">
+                                <img src="{{ asset('foto/produk/' . $row->foto_produk) }}" height="500" alt="">
                             </div>
                         @endforeach
                     </div>
@@ -35,6 +36,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
+                @endif
             </div>
             <div class="col-md-6">
                 <div class="single-product-item p-4">
@@ -50,13 +52,70 @@
                         <button type="submit" class="btn btn-warning text-white rounded">Tambah <i
                                 class="fas fa-shopping-cart"></i></button>
                     </form>
-                    <table>
+                    <table class="mt-3 table table-borderless">
                         <tr>
                             <td>
                                 <h5>Rating</h5>
                             </td>
                             <td>
-                                <h5>{{ $jumlahBintang != null ? ($jumlahBintang->rating / $jumlahReview) : "Belum ada penilaian" }}</h5>
+                                <h5>
+                                        @if($jumlahBintang)
+                                            @php 
+                                                $rating = $jumlahBintang->rating / $jumlahReview;
+                                            @endphp
+                                            @if($rating >= 1 && $rating < 2)
+                                                <div class="row col-12">
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5><span class="fa fa-star-o"></span></h5>
+                                                </div>
+                                            @elseif($rating >= 2 && $rating < 3)
+                                                <div class="row col-12">
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5><span class="fa fa-star-o"></span></h5>
+                                                </div>
+                                            @elseif($rating >= 3 && $rating < 4)
+                                                 <div class="row col-12">
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning ml-"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="mr-1"><span class="fa fa-star-o"></span></h5>
+                                                    <h5><span class="fa fa-star-o"></span></h5>
+                                                </div>
+                                            @elseif($rating >= 4 && $rating < 5)
+                                                <div class="row col-12">
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5><span class="fa fa-star-o"></span></h5>
+                                                </div>
+                                            @elseif($rating >= 5)
+                                                 <div class="row col-12">
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning mr-1"><span class="fa fa-star"></span></h5>
+                                                    <h5 class="text-warning"><span class="fa fa-star"></span></h5>
+                                                </div>
+                                            @endif
+                                         @else
+                                            Belum ada penilaian
+                                         @endif
+                                </h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h5>Jumlah Reviewer</h5>
+                            </td>
+                            <td>
+                                <h5>{{ $jumlahReview }}</h5>
                             </td>
                         </tr>
                         <tr>
@@ -384,6 +443,15 @@
                             @if ($item->foto != null)
                                 <img id="myImg{{ $item->id }}" class="myImg" width="100"
                                     src="{{ asset('foto/review/' . $item->foto) }}" />
+                            @endif
+                            @if(getBalasanAdmin($item->id) != null)
+                            <div class="alert alert-secondary mt-2 ml-2" role="alert">
+                                <h6>Respon Penjual : </h6>
+                                <p>{{ getBalasanAdmin($item->id)->isi }}</p>
+                                @if(getBalasanAdmin($item->id)->foto != null)
+                                    <img width="300" src="{{ asset('foto/balas_review/'.getBalasanAdmin($item->id)->foto) }}" />
+                                @endif
+                            </div>
                             @endif
                             <hr />
                         </div>

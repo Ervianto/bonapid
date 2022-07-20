@@ -32,6 +32,13 @@
                                     Pengiriman
                                 </a>
                             </li>
+                             <li class="nav-item">
+                                <a class="nav-link" id="pills-retur-tab" data-toggle="pill"
+                                    href="#pills-retur" role="tab" aria-controls="pills-retur"
+                                    aria-selected="true">
+                                    Retur Barang
+                                </a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai-tab" data-toggle="pill" href="#pills-selesai"
                                     role="tab" aria-controls="pills-selesai" aria-selected="false">
@@ -166,6 +173,72 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="tab-pane fade" id="pills-retur" role="tabpanel"
+                                aria-labelledby="pills-retur-tab">
+                                <table class="table" id="returBarang" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <td>No</td>
+                                            <td>Tanggal</td>
+                                            <td>Kode Transaksi</td>
+                                            <td>Kurir</td>
+                                            <td>Total Pembelian</td>
+                                            <td>Total Ongkir</td>
+                                            <td>Total Keseluruhan</td>
+                                            <td>Status</td>
+                                            <td>Detail</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php $no = 0; @endphp
+                                        @foreach ($transaksiRetur as $item)
+                                            @php $no++; @endphp
+                                            <tr>
+                                                <td>{{ $no }}</td>
+                                                <td>{{ $item->created_at }}</td>
+                                                <td>{{ $item->kode_tr }}</td>
+                                                <td>{{ $item->kurir }}</td>
+                                                <td>{{ rupiah($item->total_transaksi - $item->jasa_ongkir) }}</td>
+                                                <td>{{ $item->jasa_ongkir }}</td>
+                                                <td>{{ rupiah($item->total_transaksi) }}</td>
+                                                <td>
+                                                    Retur Barang
+                                                </td>
+                                                <td>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#returBarang{{ $item->id }}">
+                                                      Detail
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            
+                                            <div class="modal fade" id="returBarang{{ $item->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Detail Retur</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                        <div class="row">
+                                                            <div class="col-4">Keterangan</div>
+                                                            <div class="col-8">{{ $item->keterangan }}</div>
+                                                            <div class="col-4">Video</div>
+                                                            <div class="col-8"><video width="100" src="{{ asset('video/retur/'.$item->video_response) }}" controls></video></div>
+                                                        </div>
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                             <div class="tab-pane fade" id="pills-selesai" role="tabpanel"
                                 aria-labelledby="pills-selesai-tab">
                                 <table class="table" id="transaksiSelesai" style="width: 100%">
@@ -258,5 +331,6 @@
         $("#belumTerbayar").DataTable();
         $("#pengirimanBarang").DataTable();
         $("#transaksiSelesai").DataTable();
+        $("#returBarang").DataTable();
     </script>
 @endpush

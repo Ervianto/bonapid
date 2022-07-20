@@ -48,10 +48,12 @@
                                                     Terverfikasi & Terbayar
                                                 @elseif($row->status == 3)
                                                     Dibatalkan
+                                                @elseif($row->status == 4)
+                                                    Ditolak
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($row->status != 3 && $row->status != 2)
+                                                @if ($row->status != 3 && $row->status != 2 && $row->status != 4)
                                                     <button type="button" data-toggle="modal"
                                                         data-target="#modalBatal{{ $row->id }}" class="btn btn-danger">
                                                         Batalkan
